@@ -12,19 +12,11 @@ pub fn one() {
     let num_safe_reports: u32 = input.lines().enumerate().map(|(i, line)| {
         let digits: Vec<i32> = line.split(" ").map(|d| d.parse::<i32>().unwrap()).collect();
         
-        let sign = if digits.get(0).unwrap() > digits.get(1).unwrap() {
-            -1
-        } else {
+        if big_safe_check(&digits) {
             1
-        };
-        for i in 0..(digits.len()-1) {
-            let current = digits.get(i).unwrap();
-            let next = digits.get(i+1).unwrap();
-            if !safe_check(current, next, &sign) {
-                return 0;
-            }
+        } else {
+            0
         }
-        1
     }).sum();
 
     
@@ -39,49 +31,22 @@ pub fn two() {
     let num_safe_reports: u32 = input.lines().enumerate().map(|(i, line)| {
         let digits: Vec<i32> = line.split(" ").map(|d| d.parse::<i32>().unwrap()).collect();
         
-        let mut sign = if digits.get(0).unwrap() > digits.get(1).unwrap() {
-            -1
-        } else {
-            1
-        };
-        let mut failed = false;
-        for i in 0..(digits.len()-1) {
-            let current = digits.get(i).unwrap();
-            let next = digits.get(i+1).unwrap();
-            if !safe_check(current, next, &sign) {
-                failed = true;
-                break;
-            }
-        }
-        if failed {
+        let mut safe = big_safe_check(&digits);
+        if !safe {
             for j in 0..digits.len() {
-                failed = false;
                 let mut digits_copy = digits.clone();
                 digits_copy.remove(j);
-                let l = digits_copy.len();
-                sign = if digits_copy.get(0).unwrap() > digits_copy.get(1).unwrap() {
-                    -1
-                } else {
-                    1
-                };
-                for i in 0..(digits_copy.len()-1) {
-                    let current = digits_copy.get(i).unwrap();
-                    let next = digits_copy.get(i+1).unwrap();
-                    if !safe_check(current, next, &sign) {
-                        failed = true;
-                        break;
-                    }
-                }
-                if !failed {
+                safe = big_safe_check(&digits_copy);
+                if safe {
                     break;
                 }
             }
         }
         
-        if failed {
-            0
-        } else {
+        if safe {
             1
+        } else {
+            0
         }
     }).sum();
 
@@ -89,19 +54,23 @@ pub fn two() {
     submit!(2, num_safe_reports);
 }
 
-fn safe_check(current: &i32, next: &i32, sign: &i32) -> bool {
-    let difference = next - current;
-    let difference_magnitude = difference.abs();
-    if difference_magnitude == 0 || difference_magnitude > 3 {
-        return false;
+fn big_safe_check(nums: &Vec<i32>) -> bool {
+    let sign = if nums.get(0).unwrap() > nums.get(1).unwrap() {
+        -1
+    } else {
+        1
+    };
+    for i in 0..(nums.len()-1) {
+        let current = nums.get(i).unwrap();
+        let next = nums.get(i+1).unwrap();
+        if !safe_check(current, next, &sign) {
+            return false;
+        }
     }
-    if (difference/difference.abs()) + sign == 0 {
-        return false;
-    }
-    true
+    return true;
 }
 
-fn safe_check_two(current: &i32, next: &i32, sign: &i32) -> bool {
+fn safe_check(current: &i32, next: &i32, sign: &i32) -> bool {
     let difference = next - current;
     let difference_magnitude = difference.abs();
     if difference_magnitude == 0 || difference_magnitude > 3 {
