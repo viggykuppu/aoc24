@@ -7,8 +7,6 @@ use aocd::*;
 #[aocd(2024, 2)]
 pub fn one() {
     let input = input!();
-    let number_regex = Regex::new(r"(\d+)\s+(\d+)").unwrap();
-    
     let num_safe_reports: u32 = input.lines().enumerate().map(|(i, line)| {
         let digits: Vec<i32> = line.split(" ").map(|d| d.parse::<i32>().unwrap()).collect();
         
@@ -26,8 +24,6 @@ pub fn one() {
 #[aocd(2024, 2)]
 pub fn two() {
     let input = input!();
-    let number_regex = Regex::new(r"(\d+)\s+(\d+)").unwrap();
-    
     let num_safe_reports: u32 = input.lines().enumerate().map(|(i, line)| {
         let digits: Vec<i32> = line.split(" ").map(|d| d.parse::<i32>().unwrap()).collect();
         
@@ -50,7 +46,6 @@ pub fn two() {
         }
     }).sum();
 
-    
     submit!(2, num_safe_reports);
 }
 
@@ -60,14 +55,9 @@ fn big_safe_check(nums: &Vec<i32>) -> bool {
     } else {
         1
     };
-    for i in 0..(nums.len()-1) {
-        let current = nums.get(i).unwrap();
-        let next = nums.get(i+1).unwrap();
-        if !safe_check(current, next, &sign) {
-            return false;
-        }
-    }
-    return true;
+    nums.windows(2).all(|pair| {
+        safe_check(&pair[0], &pair[1], &sign)
+    })
 }
 
 fn safe_check(current: &i32, next: &i32, sign: &i32) -> bool {
