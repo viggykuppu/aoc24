@@ -63,7 +63,7 @@ fn big_safe_check(nums: &Vec<i32>) -> bool {
 fn safe_check(current: &i32, next: &i32, sign: &i32) -> bool {
     let difference = next - current;
     let difference_magnitude = difference.abs();
-    if difference_magnitude == 0 || difference_magnitude > 3 {
+    if !(1..=3).contains(&difference_magnitude) {
         return false;
     }
     if (difference/difference.abs()) + sign == 0 {
