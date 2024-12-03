@@ -1,7 +1,3 @@
-use regex::Regex;
-use std::collections::HashMap;
-use std::iter::zip;
-
 use aocd::*;
 
 #[aocd(2024, 2)]
@@ -17,7 +13,6 @@ pub fn one() {
         }
     }).sum();
 
-    
     submit!(1, num_safe_reports);
 }
 
