@@ -11,7 +11,7 @@ pub fn one() {
     let mut l1 = Vec::<i32>::new();
     let mut l2 = Vec::<i32>::new();
 
-    input.lines().enumerate().for_each(|(i, line)| {
+    input.lines().for_each(|line| {
         let caps: Vec<_> = number_regex.captures_iter(line).collect();
         l1.push(caps.get(0).unwrap().get(1).unwrap().as_str().parse::<i32>().unwrap());
         l2.push(caps.get(0).unwrap().get(2).unwrap().as_str().parse::<i32>().unwrap());
@@ -32,7 +32,7 @@ pub fn two() {
     let number_regex = Regex::new(r"(\d+)\s+(\d+)").unwrap();
     let mut l1 = Vec::<i32>::new();
     let mut frequency_map = HashMap::<i32, i32>::new();
-    input.lines().enumerate().for_each(|(i, line)| {
+    input.lines().for_each(|line| {
         let caps: Vec<_> = number_regex.captures_iter(line).collect();
         l1.push(caps.get(0).unwrap().get(1).unwrap().as_str().parse::<i32>().unwrap());
         let right = caps.get(0).unwrap().get(2).unwrap().as_str().parse::<i32>().unwrap();

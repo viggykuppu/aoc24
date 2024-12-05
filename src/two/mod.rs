@@ -3,9 +3,8 @@ use aocd::*;
 #[aocd(2024, 2)]
 pub fn one() {
     let input = input!();
-    let num_safe_reports: u32 = input.lines().enumerate().map(|(i, line)| {
+    let num_safe_reports: u32 = input.lines().map(|line| {
         let digits: Vec<i32> = line.split(" ").map(|d| d.parse::<i32>().unwrap()).collect();
-        
         if big_safe_check(&digits) {
             1
         } else {
@@ -19,7 +18,7 @@ pub fn one() {
 #[aocd(2024, 2)]
 pub fn two() {
     let input = input!();
-    let num_safe_reports: u32 = input.lines().enumerate().map(|(i, line)| {
+    let num_safe_reports: u32 = input.lines().map(|line| {
         let digits: Vec<i32> = line.split(" ").map(|d| d.parse::<i32>().unwrap()).collect();
         
         let mut safe = big_safe_check(&digits);
