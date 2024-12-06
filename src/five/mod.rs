@@ -14,7 +14,7 @@ pub fn one() {
     submit!(1, sum);
 }
 
-#[aocd(2024, 5)]
+#[aocd(2024, 5, "src/five/input.txt")]
 pub fn two() {
     let input = input!();
     let after_map = parse_rules(&input);
@@ -33,6 +33,7 @@ pub fn two() {
             }
             return Ordering::Equal;
         });
+        println!("{bad_page:?}");
         return *bad_page.get(bad_page.len()/2).unwrap();
     }).sum();
 
