@@ -25,7 +25,6 @@ pub fn one() {
                 }
             });
             if result == total {
-                // println!("line is valid {line}");
                 return total;
             }
         }
@@ -57,7 +56,6 @@ pub fn two() {
                 }
             });
             if result == total {
-                // println!("line is valid {line}");
                 initial_valid_lines.insert(idx);
                 return total;
             }
@@ -79,24 +77,15 @@ pub fn two() {
                     i_base_3.reverse();
                     let operation_bit = i_base_3.get((j-1) as usize).unwrap_or(&'0');
                     if operation_bit == &'0' {
-                        if total == 292 {
-                            // print!("+,");
-                        }
                         return acc + next;
                     } else if operation_bit == &'1' {
-                        // print!("*,");
                         return acc * next;
                     } else {
                         let concatenated = acc.to_string() + &next.to_string();
-                        // print!("|,");
                         return concatenated.parse::<u64>().unwrap();
                     }
                 });
-                // if total == 292 {
-                //     println!("result {result}");
-                // }
                 if result == total {
-                    // println!("line is valid {line}");
                     return total;
                 }
             }
