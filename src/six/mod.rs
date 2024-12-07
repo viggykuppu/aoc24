@@ -17,10 +17,6 @@ pub fn one() {
     submit!(1, visited.len());
 }
 
-fn check_bounds(pos: (isize, isize), bounds: (isize, isize)) -> bool {
-    return (0..bounds.0).contains(&pos.0) && (0..bounds.1).contains(&pos.1);
-}
-
 fn travel(grid: &Vec<Vec<char>>, start: (isize, isize), start_direction: Direction) -> HashSet<(isize, isize)> {
     let mut visited: HashSet<(isize, isize)> = HashSet::new();
     let mut direction: Direction = start_direction;
