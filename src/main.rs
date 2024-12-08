@@ -8,8 +8,9 @@ mod four;
 mod five;
 mod six;
 mod seven;
+mod eight;
 
 fn main() {
-    seven::one();
-    seven::two();
+    eight::one();
+    eight::two();
 }
