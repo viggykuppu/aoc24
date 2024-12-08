@@ -15,11 +15,8 @@ pub fn one() {
                 if node1 != node2 {
                     let dx = (node1.0 as isize) - (node2.0 as isize);
                     let dy = (node1.1 as isize) - (node2.1 as isize);
-
-                    let anti_node1 = (node1.0 as isize + dx, node1.1 as isize + dy);
-                    let anti_node2 = (node2.0 as isize - dx, node2.1 as isize - dy);
-                    anti_nodes.insert(anti_node1);
-                    anti_nodes.insert(anti_node2);
+                    let anti_node = (node1.0 as isize + dx, node1.1 as isize + dy);
+                    anti_nodes.insert(anti_node);
                 }
             }
         }
@@ -61,13 +58,6 @@ pub fn two() {
                         anti_nodes.insert(current);
                         current.0 = current.0 + dx;
                         current.1 = current.1 + dy;
-                    }
-                    // get all antinodes starting at node2 in that direction
-                    current = (node2.0 as isize, node2.1 as isize);
-                    while (0..(bounds.0 as isize)).contains(&current.0) && (0..(bounds.1 as isize)).contains(&current.1) {
-                        anti_nodes.insert(current);
-                        current.0 = current.0 - dx;
-                        current.1 = current.1 - dy;
                     }
                 }
             }
