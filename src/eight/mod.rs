@@ -28,18 +28,6 @@ pub fn one() {
     submit!(1, total_anti_nodes);
 }
 
-fn is_valid(total: u64, nums: Vec<u64>, ops: &[char]) -> u64 {
-    let mut t = 0;
-    for op in ops {
-        if op == &'+' {
-            t = total + nums[0];
-        } else if op == &'*' {
-            t = total * nums[0];
-        }
-    }
-    return t;
-}
-
 #[aocd(2024, 8)]
 pub fn two() {
     let input = input!();
