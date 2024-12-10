@@ -13,8 +13,8 @@ pub fn one() {
 
     input.lines().for_each(|line| {
         let caps: Vec<_> = number_regex.captures_iter(line).collect();
-        l1.push(caps.get(0).unwrap().get(1).unwrap().as_str().parse::<i32>().unwrap());
-        l2.push(caps.get(0).unwrap().get(2).unwrap().as_str().parse::<i32>().unwrap());
+        l1.push(caps.first().unwrap().get(1).unwrap().as_str().parse::<i32>().unwrap());
+        l2.push(caps.first().unwrap().get(2).unwrap().as_str().parse::<i32>().unwrap());
     });
 
     l1.sort();
@@ -34,8 +34,8 @@ pub fn two() {
     let mut frequency_map = HashMap::<i32, i32>::new();
     input.lines().for_each(|line| {
         let caps: Vec<_> = number_regex.captures_iter(line).collect();
-        l1.push(caps.get(0).unwrap().get(1).unwrap().as_str().parse::<i32>().unwrap());
-        let right = caps.get(0).unwrap().get(2).unwrap().as_str().parse::<i32>().unwrap();
+        l1.push(caps.first().unwrap().get(1).unwrap().as_str().parse::<i32>().unwrap());
+        let right = caps.first().unwrap().get(2).unwrap().as_str().parse::<i32>().unwrap();
         if let Some(value) = frequency_map.get(&right) {
             frequency_map.insert(right, value+1);
         } else {

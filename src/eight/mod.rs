@@ -69,10 +69,10 @@ fn build_grid(input: &str) -> (Vec<Vec<char>>, HashMap<char, HashSet<(usize, usi
             }
         }
     }
-    return (grid, nodes);
+    (grid, nodes)
 } 
 
-fn print_grid_with_anti_nodes(grid: &Vec<Vec<char>>, anti_nodes: &HashSet<(isize, isize)>, bounds: &(usize, usize)) {
+fn print_grid_with_anti_nodes(grid: &[Vec<char>], anti_nodes: &HashSet<(isize, isize)>, bounds: &(usize, usize)) {
     for i in 0..bounds.0 {
         for j in 0..bounds.1 {
             let c = grid[i][j];
@@ -86,6 +86,6 @@ fn print_grid_with_anti_nodes(grid: &Vec<Vec<char>>, anti_nodes: &HashSet<(isize
                 print!("{c}");
             }
         }
-        println!("");
+        println!();
     }
 }

@@ -41,7 +41,7 @@ fn get_trailhead_score(map: &Vec<Vec<u32>>, location: (usize, usize), visited: &
     }
     let current_elevation = map[location.0][location.1];
     let mut total_trailheads = 0;
-    for v in vec![(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
+    for v in [(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
         let new_location = (location.0 as isize + v.0, location.1 as isize + v.1);
         if (0..(map.len() as isize)).contains(&new_location.0) && (0..(map[0].len() as isize)).contains(&new_location.1) {
             let new_location = (new_location.0 as usize, new_location.1 as usize);

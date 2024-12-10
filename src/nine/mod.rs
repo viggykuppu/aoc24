@@ -49,7 +49,7 @@ pub fn one() {
         }
     }
     let checksum: u64 = condensed_disk.iter().enumerate().map(|(i, n)| {
-        return ((i as u64)*n) as u64;
+        (i as u64)*n
     }).sum();
     submit!(1, checksum);
 }
@@ -127,7 +127,7 @@ pub fn two() {
         }
     }
     let checksum: u64 = condensed_disk.iter().enumerate().map(|(i, n)| {
-        return ((i as u64)*(n.unwrap_or(0))) as u64;
+        (i as u64)*(n.unwrap_or(0))
     }).sum();
 
     submit!(2, checksum);
@@ -171,7 +171,7 @@ pub fn two_clean() {
         i += full_block.len();
     }
     let checksum: u64 = disk.iter().enumerate().map(|(i, n)| {
-        return ((i as u64)*(n.unwrap_or(0))) as u64;
+        (i as u64)*(n.unwrap_or(0))
     }).sum();
     submit!(2, checksum);
 }
@@ -184,10 +184,10 @@ fn pretty_print_disk(disk: &Vec<Option<u64>>) {
             print!(".");
         }
     }
-    println!("");
+    println!();
 }
 
-fn find_space(disk: &Vec<Option<u64>>, space: usize) -> Option<usize> {
+fn find_space(disk: &[Option<u64>], space: usize) -> Option<usize> {
     let mut i = 0;
     while i < disk.len() {
         let block_start = disk[i];
@@ -202,7 +202,7 @@ fn find_space(disk: &Vec<Option<u64>>, space: usize) -> Option<usize> {
     None
 }
 
-fn get_full_block(disk: &Vec<Option<u64>>, index: usize) -> Vec<Option<u64>> {
+fn get_full_block(disk: &[Option<u64>], index: usize) -> Vec<Option<u64>> {
     let mut full_block: Vec<Option<u64>> = Vec::new();
     let start = disk[index];
     let mut i = index;

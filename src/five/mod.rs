@@ -31,10 +31,10 @@ pub fn two() {
                     return Ordering::Greater;
                 }
             }
-            return Ordering::Equal;
+            Ordering::Equal
         });
         println!("{bad_page:?}");
-        return *bad_page.get(bad_page.len()/2).unwrap();
+        *bad_page.get(bad_page.len()/2).unwrap()
     }).sum();
 
     submit!(2, sum);
@@ -51,7 +51,7 @@ fn parse_rules(input: &str) -> HashMap<u32, HashSet<u32>> {
             after_map.entry(x).or_default().insert(y);
         }
     });
-    return after_map;
+    after_map
 }
 
 fn is_valid_page(line: &str, after_map: &HashMap<u32,HashSet<u32>>) -> bool {
@@ -62,8 +62,8 @@ fn is_valid_page(line: &str, after_map: &HashMap<u32,HashSet<u32>>) -> bool {
     let mut seen_nums:HashSet<u32> = HashSet::new();
     for num in nums.iter() {
         let valid = seen_nums.iter().all(|seen_num| {
-            if after_map.contains_key(&num) {
-                !after_map.get(&num).unwrap().contains(seen_num)
+            if after_map.contains_key(num) {
+                !after_map.get(num).unwrap().contains(seen_num)
             } else {
                 true
             }

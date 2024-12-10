@@ -8,14 +8,14 @@ pub fn one() {
 
     let mut xs = HashSet::<(isize, isize)>::new();
     for i in 0..grid.len() {
-        for j in 0..grid.get(0).unwrap().len() {
+        for j in 0..grid.first().unwrap().len() {
             let c = grid.get(i).unwrap().get(j).unwrap();
             if *c == 'X' {
                 xs.insert((i as isize,j as isize));
             }
         }
     }
-    let bounds = (grid.len() as isize, grid.get(0).unwrap().len() as isize);
+    let bounds = (grid.len() as isize, grid.first().unwrap().len() as isize);
     let total_xmases: u32 = xs.iter().map(|start| {
         let mut count = 0;
         for i in -1..=1 {
@@ -38,14 +38,14 @@ pub fn two() {
     // Find all the As and then check the corners to see if they make MAS-es
     let mut starting_as = HashSet::<(isize, isize)>::new();
     for i in 0..grid.len() {
-        for j in 0..grid.get(0).unwrap().len() {
+        for j in 0..grid.first().unwrap().len() {
             let c = grid.get(i).unwrap().get(j).unwrap();
             if *c == 'A' {
                 starting_as.insert((i as isize,j as isize));
             }
         }
     }
-    let bounds = (grid.len() as isize, grid.get(0).unwrap().len() as isize);
+    let bounds = (grid.len() as isize, grid.first().unwrap().len() as isize);
     let total_xmases: u32 = starting_as.iter().map(|start| {
         let top_left = (start.0-1, start.1-1);
         let bottom_right = (start.0+1, start.1+1);

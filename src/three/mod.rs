@@ -21,9 +21,9 @@ pub fn two() {
     let number_regex = Regex::new(r"mul\((\d+),(\d+)\)|(do\(\))|(don't\(\))").unwrap();
     let mut enabled = true;
     let sum: u32 = number_regex.captures_iter(&input).map(|cap| { 
-        if let Some(_) = cap.get(3) {
+        if cap.get(3).is_some() {
             enabled = true;
-        } else if let Some(_) = cap.get(4) {
+        } else if cap.get(4).is_some() {
             enabled = false;
         } else if enabled {
             let x = cap.get(1).unwrap().as_str().parse::<u32>().unwrap();

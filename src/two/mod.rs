@@ -44,7 +44,7 @@ pub fn two() {
 }
 
 fn big_safe_check(nums: &Vec<i32>) -> bool {
-    let sign = if nums.get(0).unwrap() > nums.get(1).unwrap() {
+    let sign = if nums.first().unwrap() > nums.get(1).unwrap() {
         -1
     } else {
         1
