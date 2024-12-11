@@ -44,8 +44,8 @@ pub fn two() {
                     let mut current = (node1.0 as isize, node1.1 as isize);
                     while (0..(bounds.0 as isize)).contains(&current.0) && (0..(bounds.1 as isize)).contains(&current.1) {
                         anti_nodes.insert(current);
-                        current.0 = current.0 + dx;
-                        current.1 = current.1 + dy;
+                        current.0 += dx;
+                        current.1 += dy;
                     }
                 }
             }
@@ -73,10 +73,9 @@ fn build_grid(input: &str) -> (Vec<Vec<char>>, HashMap<char, HashSet<(usize, usi
 } 
 
 fn print_grid_with_anti_nodes(grid: &[Vec<char>], anti_nodes: &HashSet<(isize, isize)>, bounds: &(usize, usize)) {
-    for i in 0..bounds.0 {
-        for j in 0..bounds.1 {
-            let c = grid[i][j];
-            if c == '.' {
+    for (i, row) in grid.iter().enumerate().take(bounds.0) {
+        for (j, c) in row.iter().enumerate().take(bounds.1) {
+            if *c == '.' {
                 if anti_nodes.contains(&(i as isize, j as isize)) {
                     print!("#");
                 } else {

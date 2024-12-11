@@ -43,7 +43,7 @@ pub fn two() {
     submit!(2, num_safe_reports);
 }
 
-fn big_safe_check(nums: &Vec<i32>) -> bool {
+fn big_safe_check(nums: &[i32]) -> bool {
     let sign = if nums.first().unwrap() > nums.get(1).unwrap() {
         -1
     } else {

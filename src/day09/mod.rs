@@ -106,14 +106,12 @@ pub fn two() {
                 let mut full_reverse_block = get_full_block(&disk_reverse, j);
                 let full_reverse_block_length = full_reverse_block.len();
                 if let Some(v) = disk_reverse[j] {
-                    if !moved_blocks.contains(&v) {
-                        if full_reverse_block.len() <= full_block.len() {
-                            moved_blocks.insert(v);
-                            i += full_reverse_block.len();
-                            condensed_disk.append(&mut full_reverse_block);
-                            added_block = true;
-                            break;
-                        }
+                    if !moved_blocks.contains(&v) && full_reverse_block.len() <= full_block.len() {
+                        moved_blocks.insert(v);
+                        i += full_reverse_block.len();
+                        condensed_disk.append(&mut full_reverse_block);
+                        added_block = true;
+                        break;
                     }
                 }
                 j += full_reverse_block_length;
@@ -192,10 +190,8 @@ fn find_space(disk: &[Option<u64>], space: usize) -> Option<usize> {
     while i < disk.len() {
         let block_start = disk[i];
         let full_block = get_full_block(disk, i);
-        if block_start.is_none() {
-            if full_block.len() >= space {
-                return Some(i);
-            }
+        if block_start.is_none() && full_block.len() >= space {
+            return Some(i);
         }
         i += full_block.len();
     }

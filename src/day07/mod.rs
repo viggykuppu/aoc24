@@ -30,9 +30,7 @@ pub fn two() {
         let caps: Vec<_> = line_regex.captures_iter(line).collect();
         let total = caps.first().unwrap().get(1).unwrap().as_str().parse::<u64>().unwrap();
         let nums: Vec<_> = caps.first().unwrap().get(2).unwrap().as_str().split(' ').map(|n| n.parse::<u64>().unwrap()).collect();
-        if check_if_valid(total, &nums, &old_operators) {
-            return total;
-        } else if check_if_valid(total, &nums, &operators) {
+        if check_if_valid(total, &nums, &old_operators) || check_if_valid(total, &nums, &operators) {
             return total;
         }
         0

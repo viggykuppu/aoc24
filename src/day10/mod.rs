@@ -46,21 +46,17 @@ fn get_trailhead_score(map: &Vec<Vec<u32>>, location: (usize, usize), visited: &
         if (0..(map.len() as isize)).contains(&new_location.0) && (0..(map[0].len() as isize)).contains(&new_location.1) {
             let new_location = (new_location.0 as usize, new_location.1 as usize);
             let new_elevation = map[new_location.0][new_location.1];
-            if new_elevation.saturating_sub(current_elevation) == 1 {
-                if !visited.contains(&new_location) {
-                    visited.insert(new_location);
-                    let score = if new_elevation == 9 {
-                        1
-                    } else {
-                        if get_rating {
-                            get_trailhead_score(map, new_location, &mut visited.clone(), memo, get_rating)
-                        } else {
-                            get_trailhead_score(map, new_location, visited, memo, get_rating)
-                        }
-                    };
-                    memo.insert(new_location, score);
-                    total_trailheads += score;
-                }
+            if new_elevation.saturating_sub(current_elevation) == 1 && !visited.contains(&new_location) {
+                visited.insert(new_location);
+                let score = if new_elevation == 9 {
+                    1
+                } else if get_rating {
+                    get_trailhead_score(map, new_location, &mut visited.clone(), memo, get_rating)
+                } else {
+                    get_trailhead_score(map, new_location, visited, memo, get_rating)
+                };
+                memo.insert(new_location, score);
+                total_trailheads += score;
             }
         }
     }

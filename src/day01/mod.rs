@@ -45,7 +45,7 @@ pub fn two() {
 
     let similarity: i32 = l1.iter().map(|num| {
         let a = num;
-        if let Some(value) = frequency_map.get(&a) {
+        if let Some(value) = frequency_map.get(a) {
             value*a
         } else {
             0

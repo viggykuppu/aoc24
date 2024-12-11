@@ -50,5 +50,5 @@ fn process_blink(stone: &u64) -> Vec<u64> {
         let (stone_one, stone_two) = string_stone.split_at(string_stone.len()/2);
         return vec![stone_one.parse::<u64>().unwrap(), stone_two.parse::<u64>().unwrap()];
     }
-    return vec![stone*2024];
+    vec![stone*2024]
 }

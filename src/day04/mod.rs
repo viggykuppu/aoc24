@@ -58,11 +58,10 @@ pub fn two() {
             if check_bounds(top_left, bounds) && check_bounds(bottom_right, bounds) {
                 let tr = *grid.get(top_right.0 as usize).unwrap().get(top_right.1 as usize).unwrap();
                 let bl = *grid.get(bottom_left.0 as usize).unwrap().get(bottom_left.1 as usize).unwrap();
-                if (tl == 'M' && br == 'S') || (tl == 'S' && br == 'M') {
-                    if (tr == 'M' && bl == 'S') || (tr == 'S' && bl == 'M') {
-                        return 1;
-                    }   
-                }
+                if (tl == 'M' && br == 'S') || (tl == 'S' && br == 'M') ||
+                    (tr == 'M' && bl == 'S') || (tr == 'S' && bl == 'M') {
+                    return 1;
+                }   
             }
         }
         0
@@ -95,5 +94,5 @@ fn find(grid: &Vec<Vec<char>>, start: (isize, isize), bounds: (isize, isize), cu
 }
 
 fn check_bounds(pos: (isize, isize), bounds: (isize, isize)) -> bool {
-    return (0..bounds.0).contains(&pos.0) && (0..bounds.1).contains(&pos.1);
+    (0..bounds.0).contains(&pos.0) && (0..bounds.1).contains(&pos.1)
 }

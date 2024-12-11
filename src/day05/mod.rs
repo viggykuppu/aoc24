@@ -9,7 +9,7 @@ pub fn one() {
     let sum: u32 = input.lines().filter(|line| line.contains(',') && is_valid_page(line, &after_map)).map(|line| {
         let nums: Vec<u32> = line.split(',').map(|d| d.parse::<u32>().unwrap()).collect();
         let middle_num = nums.get(nums.len()/2).unwrap();
-        return *middle_num;
+        *middle_num
     }).sum();
     submit!(1, sum);
 }
@@ -22,14 +22,10 @@ pub fn two() {
         let nums: Vec<u32> = line.split(',').map(|d| d.parse::<u32>().unwrap()).collect();
         let mut bad_page = nums.clone();
         bad_page.sort_by(|a, b| {
-            if after_map.contains_key(a) {
-                if after_map[a].contains(b) {
-                    return Ordering::Less;
-                }
-            } else if after_map.contains_key(b) {
-                if after_map[b].contains(a) {
-                    return Ordering::Greater;
-                }
+            if after_map.contains_key(a) && after_map[a].contains(b) {
+                return Ordering::Less;
+            } else if after_map.contains_key(b) && after_map[b].contains(a) {
+                return Ordering::Greater;
             }
             Ordering::Equal
         });
