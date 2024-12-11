@@ -1,5 +1,4 @@
 use aocd::*;
-use radix_fmt::radix_3;
 use regex::Regex;
 use rayon::prelude::*;
 use itertools::Itertools;
