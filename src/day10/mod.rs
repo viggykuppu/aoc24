@@ -50,7 +50,6 @@ fn get_trailhead_score(map: &Vec<Vec<u32>>, location: (usize, usize), visited: &
                 if !visited.contains(&new_location) {
                     visited.insert(new_location);
                     let score = if new_elevation == 9 {
-                        // println!("found end at {new_location:?}");
                         1
                     } else {
                         if get_rating {

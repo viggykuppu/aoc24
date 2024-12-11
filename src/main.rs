@@ -3,25 +3,25 @@
 use std::time::Instant;
 
 
-mod one;
-mod two;
-mod three;
-mod four;
-mod five;
-mod six;
-mod seven;
-mod eight;
-mod nine;
-mod ten;
-mod eleven;
+mod day01;
+mod day02;
+mod day03;
+mod day04;
+mod day05;
+mod day06;
+mod day07;
+mod day08;
+mod day09;
+mod day10;
+mod day11;
 
 fn main() {
     let mut now = Instant::now();
-    eleven::one();
+    day11::one();
     let part_one_time = now.elapsed().as_millis();
     println!("Part 1 solved in {part_one_time} ms");
     now = Instant::now();
-    eleven::two();
+    day11::two();
     let part_two_time = now.elapsed().as_millis();
     println!("Part 2 solved in {part_two_time} ms");
 }

@@ -14,7 +14,7 @@ pub fn one() {
     submit!(1, sum);
 }
 
-#[aocd(2024, 5, "src/five/input.txt")]
+#[aocd(2024, 5)]
 pub fn two() {
     let input = input!();
     let after_map = parse_rules(&input);
