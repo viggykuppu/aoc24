@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use aocd::*;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
