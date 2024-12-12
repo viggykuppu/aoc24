@@ -76,8 +76,8 @@ pub fn two() {
             for free in free_space.iter_mut() {
                 if block.1 <= free.1 && block.2 > free.0 {
                     block.2 = free.0;
-                    free.1 = free.1 - block.1;
-                    free.0 = free.0 + block.1;
+                    free.1 -= block.1;
+                    free.0 += block.1;
                     break;
                 }
             }

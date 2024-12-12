@@ -16,21 +16,12 @@ pub fn one() {
         }
     };
     let mut total_price = 0;
-    // for plant in plants {
-    //     let start = m.get(&plant).unwrap();
-    //     let mut visited = HashSet::new();
-    //     let p = travel(&garden, *start, plant, &mut visited);
-    //     let l = visited.len();
-    //     println!("{plant} has per {p} and area {l}");
-    //     total_price += p*visited.len();
-    // }
     let mut visited = HashSet::new();
     for (i,j) in garden.keys() {
         let plant = garden.get(&(*i,*j)).unwrap();
         if !visited.contains(&(*i,*j)) {
             let (p, a) = travel(&garden, (*i, *j), *plant, &mut visited);
             total_price += p*a;
-            // println!("{plant} has per {p} and area {a}");
         }
     }
     submit!(1, total_price);
