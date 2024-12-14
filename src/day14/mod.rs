@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use aocd::*;
-use image::{ImageBuffer, Rgb, RgbImage};
+use image::{Rgb, RgbImage};
 use regex::Regex;
 
 #[derive(Debug)]
@@ -62,10 +62,10 @@ pub fn two() {
             velocity: (vx, vy),
         }
     }).collect();
-    let mut max_adjacency = 0;
+    let mut adjacency_score = 0;
     let mut christmas_tree_index = 0;
-    while max_adjacency < 300 {
-        let mut adjacency_score = 0;
+    while adjacency_score < 300 {
+        adjacency_score = 0;
         let mut positions = HashSet::new();
         for robot in robots.iter_mut() {
             robot.position.0 = ((robot.position.0 + robot.velocity.0) % bounds.0 + bounds.0) % bounds.0;
@@ -78,11 +78,9 @@ pub fn two() {
                 }
             }
         }
-        if adjacency_score > max_adjacency {
-            max_adjacency = adjacency_score;
-        }
         christmas_tree_index += 1;
     }
+    pretty_print_robots_to_image(&robots, &bounds);
     submit!(2, christmas_tree_index);
 }
 
@@ -104,10 +102,10 @@ fn pretty_print_robots(robots: &[Robot], bounds: &(i32, i32)) {
     }
 }
 
-fn pretty_print_robots_to_image(robots: &[Robot], bounds: &(i32, i32), second: usize) {
+fn pretty_print_robots_to_image(robots: &[Robot], bounds: &(i32, i32)) {
     let mut map = HashSet::new();
     for robot in robots.iter() {
-        let v = map.insert(robot.position);
+        map.insert(robot.position);
     }
     let mut img = RgbImage::new(bounds.0 as u32, bounds.1 as u32);
     for i in 0..bounds.0 {
@@ -117,5 +115,5 @@ fn pretty_print_robots_to_image(robots: &[Robot], bounds: &(i32, i32), second: u
             }
         }
     }
-    img.save(format!("src/day14/images/{second}.png")).unwrap();
+    img.save(format!("src/day14/christmas_tree.png")).unwrap();
 }
