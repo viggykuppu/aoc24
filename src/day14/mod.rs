@@ -41,9 +41,7 @@ pub fn one() {
         let num_robots_in_quad = quads.entry(quad_score).or_insert(0);
         *num_robots_in_quad += 1;
     }
-    let safety_factor = quads.values().fold(1,|acc, next| {
-        acc*next
-    });
+    let safety_factor = quads.values().product::<i32>();
     submit!(1, safety_factor);
 }
 
@@ -110,10 +108,10 @@ fn pretty_print_robots_to_image(robots: &[Robot], bounds: &(i32, i32)) {
     let mut img = RgbImage::new(bounds.0 as u32, bounds.1 as u32);
     for i in 0..bounds.0 {
         for j in 0..bounds.1 {
-            if map.get(&(i,j)).is_some() {
+            if map.contains(&(i,j)) {
                 img.put_pixel(i as u32, j as u32, Rgb([255,255,255]));
             }
         }
     }
-    img.save(format!("src/day14/christmas_tree.png")).unwrap();
+    img.save("src/day14/christmas_tree.png").unwrap();
 }

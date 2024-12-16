@@ -16,7 +16,7 @@ pub fn one() {
     let grid_string = input.split("\n\n").collect::<Vec<_>>()[0];
     let instruction_string = input.split("\n\n").collect::<Vec<_>>()[1];
     let mut grid = HashMap::new();
-    let instructions = build_instructions(&instruction_string);
+    let instructions = build_instructions(instruction_string);
     let mut robot_position = (0,0);
     let mut bounds = (0,0);
     grid_string.lines().enumerate().for_each(|(i, line)| {
@@ -60,7 +60,7 @@ pub fn two() {
     let grid_string = input.split("\n\n").collect::<Vec<_>>()[0];
     let instruction_string = input.split("\n\n").collect::<Vec<_>>()[1];
     let mut grid = HashMap::new();
-    let instructions = build_instructions(&instruction_string);
+    let instructions = build_instructions(instruction_string);
     let mut robot_position = (0,0);
     let mut bounds = (0,0);
     grid_string.lines().enumerate().for_each(|(i, line)| {
@@ -86,7 +86,7 @@ pub fn two() {
         });
     });
     for instruction in instructions.iter() {
-        let v = direction_map.get(&instruction).unwrap();
+        let v = direction_map.get(instruction).unwrap();
         let mut moves = make_move(&mut grid, robot_position, v, '@');
         if *instruction == Direction::Up {
             moves.sort_by(|a, b| {
@@ -122,7 +122,7 @@ fn make_move(grid: &mut HashMap<(i32,i32), char>, current: (i32, i32), velocity:
     if new_position_space == '.' {
         // move into free spot
         return vec![Move {
-            item: item,
+            item,
             start: current,
             end: new_position,
         }];
@@ -131,7 +131,7 @@ fn make_move(grid: &mut HashMap<(i32,i32), char>, current: (i32, i32), velocity:
         moves = make_move(grid, new_position, velocity, new_position_space);
         if !moves.is_empty() {
             moves.push(Move {
-                item: item,
+                item,
                 start: current,
                 end: new_position,
             });
@@ -141,7 +141,7 @@ fn make_move(grid: &mut HashMap<(i32,i32), char>, current: (i32, i32), velocity:
         moves = make_move(grid, new_position, velocity, 'O');
         if !moves.is_empty() {
             moves.push(Move {
-                item: item,
+                item,
                 start: current,
                 end: new_position,
             });
@@ -152,9 +152,9 @@ fn make_move(grid: &mut HashMap<(i32,i32), char>, current: (i32, i32), velocity:
         let left_moves = make_move(grid, new_position, velocity, '[');
         let right_moves = make_move(grid, box_right_side_position, velocity, ']');
         if !left_moves.is_empty() && !right_moves.is_empty() {
-            moves = left_moves.into_iter().interleave(right_moves.into_iter()).collect();
+            moves = left_moves.into_iter().interleave(right_moves).collect();
             moves.push(Move {
-                item: item,
+                item,
                 start: current,
                 end: new_position,
             });
@@ -165,9 +165,9 @@ fn make_move(grid: &mut HashMap<(i32,i32), char>, current: (i32, i32), velocity:
         let left_moves = make_move(grid, box_left_side_position, velocity, '[');
         let right_moves = make_move(grid, new_position, velocity, ']');
         if !left_moves.is_empty() && !right_moves.is_empty() {
-            moves = left_moves.into_iter().interleave(right_moves.into_iter()).collect();
+            moves = left_moves.into_iter().interleave(right_moves).collect();
             moves.push(Move {
-                item: item,
+                item,
                 start: current,
                 end: new_position,
             });

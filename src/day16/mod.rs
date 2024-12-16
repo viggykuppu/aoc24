@@ -1,7 +1,6 @@
 use std::{cmp::Reverse, collections::{BinaryHeap, HashMap, HashSet}};
 
 use aocd::*;
-use itertools::Itertools;
 
 #[derive(Debug, PartialEq, Eq)]
 struct Node {
@@ -13,7 +12,7 @@ struct Node {
 
 impl PartialOrd for Node {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.cost.partial_cmp(&other.cost)
+        Some(self.cmp(other))
     }
 }
 
@@ -78,8 +77,8 @@ pub fn one() {
                 to_visit.push(Reverse(Node {
                     position: new_position,
                     cost: cost + current_node.cost,
-                    direction: direction,
-                    path: path,
+                    direction,
+                    path,
                 }));
             }
         }
@@ -143,8 +142,8 @@ pub fn two() {
                 to_visit.push(Reverse(Node {
                     position: new_position,
                     cost: cost + current_node.cost,
-                    direction: direction,
-                    path: path,
+                    direction,
+                    path,
                 }));
             }
         }
