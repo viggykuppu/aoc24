@@ -18,14 +18,15 @@ mod day12;
 mod day13;
 mod day14;
 mod day15;
+mod day16;
 
 fn main() {
     let mut now = Instant::now();
-    day15::one();
+    day16::one();
     let part_one_time = now.elapsed().as_millis();
     println!("Part 1 solved in {part_one_time} ms");
     now = Instant::now();
-    day15::two();
+    day16::two();
     let part_two_time = now.elapsed().as_millis();
     println!("Part 2 solved in {part_two_time} ms");
 }
