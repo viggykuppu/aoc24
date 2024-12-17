@@ -1,8 +1,10 @@
+use std::collections::HashSet;
+
 use aocd::*;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use regex::Regex;
 
-#[aocd(2024, 17, "src/day17/input.txt")]
+#[aocd(2024, 17)]
 pub fn one() {
     let input = input!();
     let num_regex = Regex::new(r"\d+").unwrap();
@@ -26,8 +28,6 @@ pub fn one() {
     });
     let output = computer.run();
     let output = output.iter().map(|x| x.to_string()).collect::<Vec<_>>().join(",");
-    println!("computer {computer:?}");
-    println!("output {output:?}");
     submit!(1, output);
 }
 
@@ -53,28 +53,13 @@ pub fn two() {
             computer.instructions = instructions;
         }
     });
-    (35184372088832_u64..37222139739636_u64).into_par_iter().for_each(|i| {
-        let mut par_computer = Computer {
-            registers: [0,0,0],
-            instruction_pointer: 0,
-            instructions: computer.instructions.clone(),
-        };
-        par_computer.registers = [i, 0, 0];
-        par_computer.instruction_pointer = 0;
-        let output = par_computer.run();
-        if output == par_computer.instructions {
-            println!("success at {i}");
-        }
-    });
-    // let mut x = foo(0, computer);
-    // x.sort();
-    // println!("{x:?}");
-    // let solution = x[0];
-    // println!("{solution:?}");
-    submit!(2, 0);
+    let mut x = foo(0, computer, &mut HashSet::new());
+    x.sort();
+    let solution = x[0];
+    submit!(2, solution);
 }
 
-fn foo(x: u64, computer: Computer) -> Vec<u64> {
+fn foo(x: u64, computer: Computer, tried: &mut HashSet<u64>) -> Vec<u64> {
     let mut computer = computer.clone();
     computer.registers = [x, 0, 0];
     computer.instruction_pointer = 0;
@@ -86,17 +71,26 @@ fn foo(x: u64, computer: Computer) -> Vec<u64> {
         return vec![x];
     }
     let mut potentials = Vec::new();
-    for j in 1..=8 {
+    for k in 1..=64 {
+        let j = k%8;
+        let p = (k&0b111000)<<3;
+        let test_number = (x*8 & !(0b111000000)) + j + p;
+        if tried.contains(&test_number) {
+            continue;
+        }
         let mut computer = computer.clone();
-        computer.registers = [x+j, 0, 0];
+        computer.registers = [test_number, 0, 0];
         computer.instruction_pointer = 0;
         let output = computer.run();
+        if output.len() > computer.instructions.len() {
+            return vec![];
+        }
         if output == computer.instructions[computer.instructions.len()-output.len()..] {
             if output.len() == computer.instructions.len() {
-                return vec![x+j];
+                return vec![test_number];
             }
-            let x = x*8 + (j as u64)*8;
-            let y = foo(x, computer);
+            tried.insert(test_number);
+            let y = foo(test_number, computer, tried);
             potentials = [potentials, y].concat();
         }
     }
