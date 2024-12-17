@@ -117,12 +117,12 @@ pub fn two() {
     let mut optimal_path_nodes = HashSet::new();
     loop {
         let current_node = to_visit.pop().unwrap().0;
-        if current_node.position == exit {
-            if let Some(exit_cost) = exit_cost {
-                if current_node.cost > exit_cost {
-                    break;
-                }
+        if let Some(exit_cost) = exit_cost {
+            if current_node.cost > exit_cost {
+                break;
             }
+        }
+        if current_node.position == exit {
             exit_cost = Some(current_node.cost);
             for node in current_node.path {
                 optimal_path_nodes.insert(node);

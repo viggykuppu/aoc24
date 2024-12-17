@@ -3,12 +3,6 @@ use std::collections::HashMap;
 use aocd::*;
 use itertools::Itertools;
 
-#[derive(Debug)]
-struct Robot {
-    position: (i32, i32),
-    velocity: (i32, i32),
-}
-
 #[aocd(2024, 15)]
 pub fn one() {
     let input = input!();

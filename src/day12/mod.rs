@@ -100,7 +100,6 @@ pub fn two() {
     submit!(2, total_price);
 }
 
-#[derive(Debug)]
 struct Node {
     position: (isize, isize),
     next: Vec<(Orientation, (isize,isize))>,
