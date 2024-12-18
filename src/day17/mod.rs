@@ -31,7 +31,7 @@ pub fn one() {
     submit!(1, output);
 }
 
-#[aocd(2024, 17, "src/day17/input.txt")]
+#[aocd(2024, 17)]
 pub fn two() {
     let input = input!();
     let num_regex = Regex::new(r"\d+").unwrap();
