@@ -2,26 +2,7 @@ use std::{cmp::Reverse, collections::{BinaryHeap, HashMap, HashSet}};
 
 use aocd::*;
 
-#[derive(Debug, PartialEq, Eq)]
-struct Node {
-    position: (i32, i32),
-    distance: usize,
-    h: i32,
-}
-
-impl PartialOrd for Node {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for Node {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        (self.distance as i32 + self.h).cmp(&(other.distance as i32 + other.h))
-    }
-}
-
-#[aocd(2024, 18, "src/day18/input.txt")]
+#[aocd(2024, 18)]
 pub fn one() {
     let input = input!();
     let bytes = input.lines().map(|line| {
@@ -30,8 +11,8 @@ pub fn one() {
         let y = split[1].parse::<i32>().unwrap();
         (x,y)
     });
-    let dimension = 6;
-    let num_fallen_bytes = 12;
+    let dimension = 70;
+    let num_fallen_bytes = 1024;
     let mut grid = HashMap::new();
     for i in 0..=dimension {
         for j in 0..=dimension {
@@ -108,6 +89,25 @@ pub fn two() {
     let (x, y) = breaking_byte;
     let answer = format!("{x},{y}");
     submit!(2, answer);
+}
+
+#[derive(Debug, PartialEq, Eq)]
+struct Node {
+    position: (i32, i32),
+    distance: usize,
+    h: i32,
+}
+
+impl PartialOrd for Node {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Node {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        (self.distance as i32 + self.h).cmp(&(other.distance as i32 + other.h))
+    }
 }
 
 fn a_star(grid: &HashMap<(i32, i32), char>, goal: (i32, i32)) -> (usize, HashMap<(i32, i32), (i32, i32)>) {
