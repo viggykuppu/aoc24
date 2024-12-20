@@ -24,7 +24,6 @@ pub fn one() {
                 grid.insert((i,j), '.');
                 nodes.insert((i,j), Node {
                     position: (i,j),
-                    distance_from_end: usize::MAX,
                     distance_from_start: usize::MAX,
                 });
             }
@@ -34,73 +33,22 @@ pub fn one() {
             }
             if c == 'E' {
                 end = (i,j);
-                nodes.get_mut(&(i,j)).unwrap().distance_from_end = 0;
             }
         })
     });
-    let base_distance = 9432;
-    let target = base_distance - 100;
-    let mut potential_start_nodes = Vec::new();
-    let mut to_visit = Vec::new();
-    for node in nodes.values() {
-        to_visit.push(node.position);
-    }
-    let mut visited = HashSet::new();
-    visited.insert(start);
-    potential_start_nodes.push(start);
-    'search: while let Some(current) = get_min_from_start(&mut to_visit, &nodes) {
-        let current_distance_from_start = nodes.get(&current).unwrap().distance_from_start;
-        for v in [(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
-            let new_position = (current.0 + v.0, current.1 + v.1);
-            if visited.contains(&new_position) {
-                continue;
-            }
-            if let Some(node) = nodes.get_mut(&new_position) {
-                visited.insert(node.position);
-                node.distance_from_start = current_distance_from_start + 1;
-                if node.distance_from_start > target {
-                    break 'search;
-                }
-                potential_start_nodes.push(node.position);
-            }
-        }
-    }
-    
-    let mut potential_end_nodes = Vec::new();
-    let mut to_visit = Vec::new();
-    for node in nodes.values() {
-        to_visit.push(node.position);
-    }
-    let mut visited = HashSet::new();
-    visited.insert(end);
-    potential_end_nodes.push(end);
-    'search: while let Some(current) = get_min_from_end(&mut to_visit, &nodes) {
-        let current_distance_from_end = nodes.get(&current).unwrap().distance_from_end;
-        for v in [(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
-            let new_position = (current.0 + v.0, current.1 + v.1);
-            if visited.contains(&new_position) {
-                continue;
-            }
-            if let Some(node) = nodes.get_mut(&new_position) {
-                visited.insert(node.position);
-                node.distance_from_end = current_distance_from_end + 1;
-                if node.distance_from_end > target {
-                    break 'search;
-                }
-                potential_end_nodes.push(node.position);
-            }
-        }
-    }
-    
+    let path = traverse(&grid, start, end);
+    let path_length = path.len() - 1;
+    let target = path_length - 100;
     let mut fast_cheats = 0;
-    for x in potential_start_nodes.iter() {
-        for y in potential_end_nodes.iter() {
-            if x.0.abs_diff(y.0) + x.1.abs_diff(y.1) == 2 {
-                let start = nodes.get(&x).unwrap();
-                let end = nodes.get(&y).unwrap();
-                let total_time = start.distance_from_start + end.distance_from_end + 2;
-                let saved_time = base_distance - total_time;
-                if total_time <= target {
+    for i in 0..path.len() {
+        for j in i+1..path.len() {
+            let start: &Node = &path[i];
+            let end: &Node = &path[j];
+            let distance = end.position.0.abs_diff(start.position.0) + end.position.1.abs_diff(start.position.1);
+            if distance == 2 {
+                let time = start.distance_from_start + (path_length-end.distance_from_start) + distance as usize;
+                let x = path_length - time;
+                if time <= target {
                     fast_cheats += 1;
                 }
             }
@@ -130,7 +78,6 @@ pub fn two() {
                 grid.insert((i,j), '.');
                 nodes.insert((i,j), Node {
                     position: (i,j),
-                    distance_from_end: usize::MAX,
                     distance_from_start: usize::MAX,
                 });
             }
@@ -140,76 +87,21 @@ pub fn two() {
             }
             if c == 'E' {
                 end = (i,j);
-                nodes.get_mut(&(i,j)).unwrap().distance_from_end = 0;
             }
         })
     });
-    let base_distance = 9432;
-    let target = base_distance - 100;
-    let mut potential_start_nodes = Vec::new();
-    let mut to_visit = Vec::new();
-    for node in nodes.values() {
-        to_visit.push(node.position);
-    }
-    let mut visited = HashSet::new();
-    visited.insert(start);
-    potential_start_nodes.push(start);
-    'search: while let Some(current) = get_min_from_start(&mut to_visit, &nodes) {
-        let current_distance_from_start = nodes.get(&current).unwrap().distance_from_start;
-        for v in [(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
-            let new_position = (current.0 + v.0, current.1 + v.1);
-            if visited.contains(&new_position) {
-                continue;
-            }
-            if let Some(node) = nodes.get_mut(&new_position) {
-                visited.insert(node.position);
-                node.distance_from_start = current_distance_from_start + 1;
-                if node.distance_from_start > target {
-                    break 'search;
-                }
-                potential_start_nodes.push(node.position);
-            }
-        }
-    }
-    
-    let mut potential_end_nodes = Vec::new();
-    let mut to_visit = Vec::new();
-    for node in nodes.values() {
-        to_visit.push(node.position);
-    }
-    let mut visited = HashSet::new();
-    visited.insert(end);
-    potential_end_nodes.push(end);
-    'search: while let Some(current) = get_min_from_end(&mut to_visit, &nodes) {
-        let current_distance_from_end = nodes.get(&current).unwrap().distance_from_end;
-        for v in [(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
-            let new_position = (current.0 + v.0, current.1 + v.1);
-            if visited.contains(&new_position) {
-                continue;
-            }
-            if let Some(node) = nodes.get_mut(&new_position) {
-                visited.insert(node.position);
-                node.distance_from_end = current_distance_from_end + 1;
-                if node.distance_from_end > target {
-                    break 'search;
-                }
-                potential_end_nodes.push(node.position);
-            }
-        }
-    }
-    
+    let path = traverse(&grid, start, end);
+    let path_length = path.len() - 1;
+    let target = path_length - 100;
     let mut fast_cheats = 0;
-    let max_cheat_jump = 20;
-    for x in potential_start_nodes.iter() {
-        for y in potential_end_nodes.iter() {
-            let distance = x.0.abs_diff(y.0) + x.1.abs_diff(y.1);
-            if  distance <= max_cheat_jump {
-                let start = nodes.get(&x).unwrap();
-                let end = nodes.get(&y).unwrap();
-                let total_time = start.distance_from_start + end.distance_from_end + distance as usize;
-                let saved_time = base_distance - total_time;
-                if total_time <= target {
-                    // println!("{saved_time}: {start:?} {end:?}");
+    for i in 0..path.len() {
+        for j in i+1..path.len() {
+            let start: &Node = &path[i];
+            let end: &Node = &path[j];
+            let distance = end.position.0.abs_diff(start.position.0) + end.position.1.abs_diff(start.position.1);
+            if distance <= 20 {
+                let time = start.distance_from_start + (path_length-end.distance_from_start) + distance as usize;
+                if time <= target {
                     fast_cheats += 1;
                 }
             }
@@ -218,25 +110,10 @@ pub fn two() {
     submit!(2, fast_cheats);
 }
 
-fn get_min_from_start(to_visit: &mut Vec<(i32, i32)>, nodes: &HashMap<(i32,i32), Node>) -> Option<(i32, i32)> {
-    to_visit.sort_by(|a, b| {
-        nodes[b].distance_from_start.cmp(&nodes[a].distance_from_start)
-    });
-    to_visit.pop()
-}
-
-fn get_min_from_end(to_visit: &mut Vec<(i32, i32)>, nodes: &HashMap<(i32,i32), Node>) -> Option<(i32, i32)> {
-    to_visit.sort_by(|a, b| {
-        nodes[b].distance_from_end.cmp(&nodes[a].distance_from_end)
-    });
-    to_visit.pop()
-}
-
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 struct Node {
     position: (i32, i32),
     distance_from_start: usize,
-    distance_from_end: usize,
 }
 
 impl PartialOrd for Node {
@@ -251,33 +128,28 @@ impl Ord for Node {
     }
 }
 
-// fn traverse(grid: &HashMap<(i32, i32), char>, start: (i32, i32), goal: (i32, i32)) -> usize {
-//     let mut to_visit = BinaryHeap::new();
-//     to_visit.push(Reverse(Node {
-//         position: start,
-//         distance: 0,
-//         h: (goal.0.abs_diff(start.0)) as i32 + (goal.1.abs_diff(start.1)) as i32,
-//     }));
-//     let mut visited = HashSet::new();
-//     let mut distance_to_goal = 0; 
-//     let mut came_from = HashMap::new();
-//     while let Some(Reverse(current)) = to_visit.pop() {
-//         if current.position == goal {
-//             distance_to_goal = current.distance;
-//             break;
-//         }
-//         visited.insert(current.position);
-//         for v in [(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
-//             let new_position = (current.position.0 + v.0, current.position.1 + v.1);
-//             if Some(&'.') == grid.get(&new_position) && !visited.contains(&new_position) {
-//                 came_from.insert(new_position, current.position);
-//                 to_visit.push(Reverse(Node {
-//                     position: new_position,
-//                     distance: current.distance + 1,
-//                     h: (goal.0.abs_diff(new_position.0)) as i32 + (goal.1.abs_diff(new_position.1)) as i32,
-//                 }));
-//             }
-//         }
-//     }
-//     (distance_to_goal, came_from)
-// }
+fn traverse(grid: &HashMap<(i32, i32), char>, start: (i32, i32), end: (i32, i32)) -> Vec<Node> {
+    let mut nodes = Vec::new();
+    let mut visited = HashSet::new();
+    let mut current = Node {
+        position: start,
+        distance_from_start: 0,
+    };
+    nodes.push(current.clone());
+    visited.insert(current.position);
+    while current.position != end {
+        for v in [(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
+            let new_position = (current.position.0 + v.0, current.position.1 + v.1);
+            if Some(&'.') == grid.get(&new_position) && !visited.contains(&new_position) {
+                current = Node {
+                    position: new_position,
+                    distance_from_start: current.distance_from_start + 1,
+                };
+                break;
+            }
+        }
+        visited.insert(current.position);
+        nodes.push(current.clone());   
+    }
+    nodes
+}
