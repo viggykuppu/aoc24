@@ -180,6 +180,7 @@ struct Move {
     end: (i32, i32),
 }
 
+#[allow(dead_code)]
 fn print_grid(grid: &HashMap<(i32,i32), char>, bounds: (i32, i32)) {
     for i in 0..bounds.0 {
         for j in 0..bounds.1 {

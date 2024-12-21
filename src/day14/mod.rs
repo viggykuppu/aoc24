@@ -82,6 +82,7 @@ pub fn two() {
     submit!(2, christmas_tree_index);
 }
 
+#[allow(dead_code)]
 fn pretty_print_robots(robots: &[Robot], bounds: &(i32, i32)) {
     let mut map = HashMap::new();
     for robot in robots.iter() {

@@ -30,7 +30,7 @@ pub fn two() {
     let mut memo = HashMap::new();
     let complexity_sum: usize = input.lines().map(|line| {
         let numeric_code = line[0..3].parse::<usize>().unwrap();
-        let mut current_robot_moves = builds_dirpad_commands_for_input(line, &numpad_map, &direction_map, 'A', &(0,0));
+        let current_robot_moves = builds_dirpad_commands_for_input(line, &numpad_map, &direction_map, 'A', &(0,0));
         let min_input_length = current_robot_moves.iter().map(|moves| {
             get_shortest_input_length(moves, 25, &mut memo, &dirpad_map, &direction_map, &(0, 1))
         }).min().unwrap();
