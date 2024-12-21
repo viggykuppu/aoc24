@@ -10,24 +10,29 @@ pub fn one() {
     let mut plants: HashSet<char> = HashSet::new();
     for (i, line) in input.lines().enumerate() {
         for (j, c) in line.chars().enumerate() {
-            garden.insert((i as isize,j as isize), c);
-            m.insert(c, (i as isize,j as isize));
+            garden.insert((i as isize, j as isize), c);
+            m.insert(c, (i as isize, j as isize));
             plants.insert(c);
         }
-    };
+    }
     let mut total_price = 0;
     let mut visited = HashSet::new();
-    for (i,j) in garden.keys() {
-        let plant = garden.get(&(*i,*j)).unwrap();
-        if !visited.contains(&(*i,*j)) {
+    for (i, j) in garden.keys() {
+        let plant = garden.get(&(*i, *j)).unwrap();
+        if !visited.contains(&(*i, *j)) {
             let (p, a) = travel(&garden, (*i, *j), *plant, &mut visited);
-            total_price += p*a;
+            total_price += p * a;
         }
     }
     submit!(1, total_price);
 }
 
-fn travel(garden: &HashMap<(isize, isize), char>, current: (isize, isize), plant: char, visited: &mut HashSet<(isize, isize)>) -> (usize, usize) {
+fn travel(
+    garden: &HashMap<(isize, isize), char>,
+    current: (isize, isize),
+    plant: char,
+    visited: &mut HashSet<(isize, isize)>,
+) -> (usize, usize) {
     visited.insert(current);
     let mut p = 0;
     let mut a = 1;
@@ -49,18 +54,23 @@ fn travel(garden: &HashMap<(isize, isize), char>, current: (isize, isize), plant
 
 #[aocd(2024, 12)]
 pub fn two() {
-    let direction_map = HashMap::from([(Direction::Up, (-1, 0)), (Direction::Down, (1, 0)), (Direction::Left, (0, -1)), (Direction::Right, (0, 1))]);
+    let direction_map = HashMap::from([
+        (Direction::Up, (-1, 0)),
+        (Direction::Down, (1, 0)),
+        (Direction::Left, (0, -1)),
+        (Direction::Right, (0, 1)),
+    ]);
     let input = input!();
     let mut garden: HashMap<(isize, isize), char> = HashMap::new();
     let mut m: HashMap<char, (isize, isize)> = HashMap::new();
     let mut plants: HashSet<char> = HashSet::new();
     for (i, line) in input.lines().enumerate() {
         for (j, c) in line.chars().enumerate() {
-            garden.insert((i as isize,j as isize), c);
-            m.insert(c, (i as isize,j as isize));
+            garden.insert((i as isize, j as isize), c);
+            m.insert(c, (i as isize, j as isize));
             plants.insert(c);
         }
-    };
+    }
     let garden_grid: Vec<Vec<_>> = input.lines().map(|line| line.chars().collect()).collect();
     let mut total_price = 0;
     let mut visited = HashSet::new();
@@ -68,15 +78,22 @@ pub fn two() {
         for j in 0..garden_grid[0].len() {
             let i = i as isize;
             let j = j as isize;
-            let plant = garden.get(&(i,j)).unwrap();
-            if !visited.contains(&(i,j)) {
+            let plant = garden.get(&(i, j)).unwrap();
+            if !visited.contains(&(i, j)) {
                 let mut edges = HashMap::new();
                 let a = travel_two(&garden, (i, j), *plant, &mut visited, &mut edges);
                 let mut visited = HashSet::new();
                 let mut graph = HashMap::new();
                 for edge in edges {
                     if !visited.contains(&edge.0) {
-                        foo(&garden, edge.0, *plant, &mut visited, &mut graph, &direction_map);
+                        foo(
+                            &garden,
+                            edge.0,
+                            *plant,
+                            &mut visited,
+                            &mut graph,
+                            &direction_map,
+                        );
                     }
                 }
                 let mut visited = HashSet::new();
@@ -93,7 +110,7 @@ pub fn two() {
                         p += 2;
                     }
                 }
-                total_price += p*a;
+                total_price += p * a;
             }
         }
     }
@@ -102,12 +119,26 @@ pub fn two() {
 
 struct Node {
     position: (isize, isize),
-    next: Vec<(Orientation, (isize,isize))>,
+    next: Vec<(Orientation, (isize, isize))>,
 }
 
-fn foo(garden: &HashMap<(isize, isize), char>, current: (isize, isize), plant: char, visited: &mut HashSet<(isize, isize)>, graph: &mut HashMap<(isize, isize), Node>, direction_map: &HashMap<Direction, (isize, isize)>) {
+fn foo(
+    garden: &HashMap<(isize, isize), char>,
+    current: (isize, isize),
+    plant: char,
+    visited: &mut HashSet<(isize, isize)>,
+    graph: &mut HashMap<(isize, isize), Node>,
+    direction_map: &HashMap<Direction, (isize, isize)>,
+) {
     visited.insert(current);
-    for direction in [Direction::Right, Direction::Down, Direction::Left, Direction::Up].iter() {
+    for direction in [
+        Direction::Right,
+        Direction::Down,
+        Direction::Left,
+        Direction::Up,
+    ]
+    .iter()
+    {
         let v: &(isize, isize) = direction_map.get(direction).unwrap();
         let new_location = (current.0 + v.0, current.1 + v.1);
         let new_plant = garden.get(&new_location);
@@ -117,7 +148,12 @@ fn foo(garden: &HashMap<(isize, isize), char>, current: (isize, isize), plant: c
     }
 }
 
-fn bar(start: (isize, isize), graph: &HashMap<(isize, isize), Node>, visited: &mut HashSet<(Orientation, (isize, isize))>, orientation: Orientation) -> usize {
+fn bar(
+    start: (isize, isize),
+    graph: &HashMap<(isize, isize), Node>,
+    visited: &mut HashSet<(Orientation, (isize, isize))>,
+    orientation: Orientation,
+) -> usize {
     let node = graph.get(&start).unwrap();
     let mut has_edge = 0;
     for next in &node.next {
@@ -133,8 +169,13 @@ fn bar(start: (isize, isize), graph: &HashMap<(isize, isize), Node>, visited: &m
     has_edge
 }
 
-
-fn travel_two(garden: &HashMap<(isize, isize), char>, current: (isize, isize), plant: char, visited: &mut HashSet<(isize, isize)>, edges: &mut HashMap<(isize, isize), char>) -> usize {
+fn travel_two(
+    garden: &HashMap<(isize, isize), char>,
+    current: (isize, isize),
+    plant: char,
+    visited: &mut HashSet<(isize, isize)>,
+    edges: &mut HashMap<(isize, isize), char>,
+) -> usize {
     visited.insert(current);
     let mut a = 1;
     for v in [(-1, 0), (0, -1), (1, 0), (0, 1)].iter() {
@@ -152,11 +193,14 @@ fn travel_two(garden: &HashMap<(isize, isize), char>, current: (isize, isize), p
     a
 }
 
-
-fn build_edge_nodes(current: (isize, isize), direction: &Direction, graph: &mut HashMap<(isize, isize), Node>) {
+fn build_edge_nodes(
+    current: (isize, isize),
+    direction: &Direction,
+    graph: &mut HashMap<(isize, isize), Node>,
+) {
     if *direction == Direction::Up {
         let x = (current.0, current.1);
-        let y =  (current.0, current.1+1);
+        let y = (current.0, current.1 + 1);
         let a = graph.entry(x).or_insert(Node {
             position: x,
             next: Vec::new(),
@@ -172,44 +216,44 @@ fn build_edge_nodes(current: (isize, isize), direction: &Direction, graph: &mut 
         b.next.push((Orientation::Horizontal, x));
         // println!("b: {b:?}");
     } else if *direction == Direction::Right {
-        let x = (current.0, current.1+1);
-        let y =  (current.0+1, current.1+1);
+        let x = (current.0, current.1 + 1);
+        let y = (current.0 + 1, current.1 + 1);
         let a = graph.entry(x).or_insert(Node {
             position: x,
             next: Vec::new(),
         });
-        a.next.push((Orientation::Vertical,y));
+        a.next.push((Orientation::Vertical, y));
         let b = graph.entry(y).or_insert(Node {
             position: y,
             next: Vec::new(),
         });
-        b.next.push((Orientation::Vertical,x));
+        b.next.push((Orientation::Vertical, x));
     } else if *direction == Direction::Down {
-        let x = (current.0+1, current.1+1);
-        let y =  (current.0+1, current.1);
+        let x = (current.0 + 1, current.1 + 1);
+        let y = (current.0 + 1, current.1);
         let a = graph.entry(x).or_insert(Node {
             position: x,
             next: Vec::new(),
         });
-        a.next.push((Orientation::Horizontal,y));
+        a.next.push((Orientation::Horizontal, y));
         let b = graph.entry(y).or_insert(Node {
             position: y,
             next: Vec::new(),
         });
-        b.next.push((Orientation::Horizontal,x));
+        b.next.push((Orientation::Horizontal, x));
     } else if *direction == Direction::Left {
-        let x = (current.0+1, current.1);
-        let y =  (current.0, current.1);
+        let x = (current.0 + 1, current.1);
+        let y = (current.0, current.1);
         let a = graph.entry(x).or_insert(Node {
             position: x,
             next: Vec::new(),
         });
-        a.next.push((Orientation::Vertical,y));
+        a.next.push((Orientation::Vertical, y));
         let b = graph.entry(y).or_insert(Node {
             position: y,
             next: Vec::new(),
         });
-        b.next.push((Orientation::Vertical,x));
+        b.next.push((Orientation::Vertical, x));
     }
 }
 

@@ -9,11 +9,11 @@ pub fn one() {
     let mut total_blocks: usize = 0;
     input.chars().enumerate().for_each(|(i, char)| {
         let num_blocks = char.to_digit(10).unwrap();
-        let new_block = if i %2 == 0 {
+        let new_block = if i % 2 == 0 {
             // file
             index += 1;
             total_blocks += num_blocks as usize;
-            Some(index-1)
+            Some(index - 1)
         } else {
             // free space
             None
@@ -25,7 +25,7 @@ pub fn one() {
     let mut last_moved_to_index = 0;
     let mut condensed_disk: Vec<u64> = Vec::new();
     for i in 0..disk.len() {
-        let j = disk.len() - (i+1);
+        let j = disk.len() - (i + 1);
         if total_blocks == condensed_disk.len() {
             break;
         }
@@ -33,7 +33,7 @@ pub fn one() {
         if let Some(value_to_be_moved) = value_to_be_moved {
             loop {
                 let potential_move_spot = disk[last_moved_to_index];
-                if let Some(move_spot_value) =  potential_move_spot {
+                if let Some(move_spot_value) = potential_move_spot {
                     condensed_disk.push(move_spot_value);
                 } else {
                     condensed_disk.push(value_to_be_moved);
@@ -47,9 +47,11 @@ pub fn one() {
             }
         }
     }
-    let checksum: u64 = condensed_disk.iter().enumerate().map(|(i, n)| {
-        (i as u64)*n
-    }).sum();
+    let checksum: u64 = condensed_disk
+        .iter()
+        .enumerate()
+        .map(|(i, n)| (i as u64) * n)
+        .sum();
     submit!(1, checksum);
 }
 
@@ -62,7 +64,7 @@ pub fn two() {
     let mut location = 0;
     input.chars().enumerate().for_each(|(i, char)| {
         let num_blocks = char.to_digit(10).unwrap();
-        if i %2 == 0 {
+        if i % 2 == 0 {
             disk.push((Some(block_id), num_blocks, location));
             block_id += 1;
         } else {
@@ -83,15 +85,18 @@ pub fn two() {
             }
         }
     }
-    let checksum: u64 = disk.par_iter().map(|block| {
-        if let Some(v) = block.0 {
-            let mut total = 0;
-            for i in block.2..(block.2 + block.1) {
-                total += (i as u64)*v;
+    let checksum: u64 = disk
+        .par_iter()
+        .map(|block| {
+            if let Some(v) = block.0 {
+                let mut total = 0;
+                for i in block.2..(block.2 + block.1) {
+                    total += (i as u64) * v;
+                }
+                return total;
             }
-            return total;
-        }
-        0
-    }).sum();
+            0
+        })
+        .sum();
     submit!(2, checksum);
 }

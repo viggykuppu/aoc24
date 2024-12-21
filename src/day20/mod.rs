@@ -1,4 +1,8 @@
-use std::{cmp::Reverse, collections::{BinaryHeap, HashMap, HashSet}, usize};
+use std::{
+    cmp::Reverse,
+    collections::{BinaryHeap, HashMap, HashSet},
+    usize,
+};
 
 use aocd::*;
 use nalgebra::base;
@@ -6,8 +10,8 @@ use nalgebra::base;
 #[aocd(2024, 20, "src/day20/input.txt")]
 pub fn one() {
     let input = input!();
-    let mut start = (0,0);
-    let mut end = (0,0);
+    let mut start = (0, 0);
+    let mut end = (0, 0);
     let mut walls = HashSet::new();
     let mut grid = HashMap::new();
     let mut nodes = HashMap::new();
@@ -16,23 +20,26 @@ pub fn one() {
             let i = i as i32;
             let j = j as i32;
             if c == '#' {
-                grid.insert((i,j), '#');
+                grid.insert((i, j), '#');
                 if i != 0 && j != 0 {
-                    walls.insert((i,j));
+                    walls.insert((i, j));
                 }
             } else {
-                grid.insert((i,j), '.');
-                nodes.insert((i,j), Node {
-                    position: (i,j),
-                    distance_from_start: usize::MAX,
-                });
+                grid.insert((i, j), '.');
+                nodes.insert(
+                    (i, j),
+                    Node {
+                        position: (i, j),
+                        distance_from_start: usize::MAX,
+                    },
+                );
             }
             if c == 'S' {
-                start = (i,j);
-                nodes.get_mut(&(i,j)).unwrap().distance_from_start = 0;
+                start = (i, j);
+                nodes.get_mut(&(i, j)).unwrap().distance_from_start = 0;
             }
             if c == 'E' {
-                end = (i,j);
+                end = (i, j);
             }
         })
     });
@@ -41,12 +48,15 @@ pub fn one() {
     let target = path_length - 100;
     let mut fast_cheats = 0;
     for i in 0..path.len() {
-        for j in i+1..path.len() {
+        for j in i + 1..path.len() {
             let start: &Node = &path[i];
             let end: &Node = &path[j];
-            let distance = end.position.0.abs_diff(start.position.0) + end.position.1.abs_diff(start.position.1);
+            let distance = end.position.0.abs_diff(start.position.0)
+                + end.position.1.abs_diff(start.position.1);
             if distance == 2 {
-                let time = start.distance_from_start + (path_length-end.distance_from_start) + distance as usize;
+                let time = start.distance_from_start
+                    + (path_length - end.distance_from_start)
+                    + distance as usize;
                 let x = path_length - time;
                 if time <= target {
                     fast_cheats += 1;
@@ -60,8 +70,8 @@ pub fn one() {
 #[aocd(2024, 20, "src/day20/input.txt")]
 pub fn two() {
     let input = input!();
-    let mut start = (0,0);
-    let mut end = (0,0);
+    let mut start = (0, 0);
+    let mut end = (0, 0);
     let mut walls = HashSet::new();
     let mut grid = HashMap::new();
     let mut nodes = HashMap::new();
@@ -70,23 +80,26 @@ pub fn two() {
             let i = i as i32;
             let j = j as i32;
             if c == '#' {
-                grid.insert((i,j), '#');
+                grid.insert((i, j), '#');
                 if i != 0 && j != 0 {
-                    walls.insert((i,j));
+                    walls.insert((i, j));
                 }
             } else {
-                grid.insert((i,j), '.');
-                nodes.insert((i,j), Node {
-                    position: (i,j),
-                    distance_from_start: usize::MAX,
-                });
+                grid.insert((i, j), '.');
+                nodes.insert(
+                    (i, j),
+                    Node {
+                        position: (i, j),
+                        distance_from_start: usize::MAX,
+                    },
+                );
             }
             if c == 'S' {
-                start = (i,j);
-                nodes.get_mut(&(i,j)).unwrap().distance_from_start = 0;
+                start = (i, j);
+                nodes.get_mut(&(i, j)).unwrap().distance_from_start = 0;
             }
             if c == 'E' {
-                end = (i,j);
+                end = (i, j);
             }
         })
     });
@@ -95,12 +108,15 @@ pub fn two() {
     let target = path_length - 100;
     let mut fast_cheats = 0;
     for i in 0..path.len() {
-        for j in i+1..path.len() {
+        for j in i + 1..path.len() {
             let start: &Node = &path[i];
             let end: &Node = &path[j];
-            let distance = end.position.0.abs_diff(start.position.0) + end.position.1.abs_diff(start.position.1);
+            let distance = end.position.0.abs_diff(start.position.0)
+                + end.position.1.abs_diff(start.position.1);
             if distance <= 20 {
-                let time = start.distance_from_start + (path_length-end.distance_from_start) + distance as usize;
+                let time = start.distance_from_start
+                    + (path_length - end.distance_from_start)
+                    + distance as usize;
                 if time <= target {
                     fast_cheats += 1;
                 }
@@ -149,7 +165,7 @@ fn traverse(grid: &HashMap<(i32, i32), char>, start: (i32, i32), end: (i32, i32)
             }
         }
         visited.insert(current.position);
-        nodes.push(current.clone());   
+        nodes.push(current.clone());
     }
     nodes
 }

@@ -1,5 +1,5 @@
-use std::time::Instant;
 use aoc24::*;
+use std::time::Instant;
 
 fn main() {
     let mut now = Instant::now();

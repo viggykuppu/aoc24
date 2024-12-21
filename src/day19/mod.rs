@@ -1,4 +1,7 @@
-use std::{cmp::Reverse, collections::{BinaryHeap, HashMap, HashSet}};
+use std::{
+    cmp::Reverse,
+    collections::{BinaryHeap, HashMap, HashSet},
+};
 
 use aocd::*;
 
@@ -16,10 +19,13 @@ pub fn one() {
         }
     });
     let mut memo = HashMap::new();
-    let num_possible_towels: usize = designs.iter().map(|design| {
-        let result = foo(&towels, design, &mut memo);
-        result as usize
-    }).sum();
+    let num_possible_towels: usize = designs
+        .iter()
+        .map(|design| {
+            let result = foo(&towels, design, &mut memo);
+            result as usize
+        })
+        .sum();
     submit!(1, num_possible_towels);
 }
 
@@ -58,10 +64,13 @@ pub fn two() {
         }
     });
     let mut memo = HashMap::new();
-    let num_possible_towels: usize = designs.iter().map(|design| {
-        let result = bar(&towels, design, &mut memo);
-        result as usize
-    }).sum();
+    let num_possible_towels: usize = designs
+        .iter()
+        .map(|design| {
+            let result = bar(&towels, design, &mut memo);
+            result as usize
+        })
+        .sum();
     submit!(2, num_possible_towels);
 }
 

@@ -1,4 +1,7 @@
-use std::{cmp::Reverse, collections::{BinaryHeap, HashMap, HashSet}};
+use std::{
+    cmp::Reverse,
+    collections::{BinaryHeap, HashMap, HashSet},
+};
 
 use aocd::*;
 
@@ -9,14 +12,14 @@ pub fn one() {
         let split: Vec<_> = line.split(',').collect();
         let x = split[0].parse::<i32>().unwrap();
         let y = split[1].parse::<i32>().unwrap();
-        (x,y)
+        (x, y)
     });
     let dimension = 70;
     let num_fallen_bytes = 1024;
     let mut grid = HashMap::new();
     for i in 0..=dimension {
         for j in 0..=dimension {
-            grid.insert((i,j), '.');
+            grid.insert((i, j), '.');
         }
     }
     bytes.take(num_fallen_bytes).for_each(|byte| {
@@ -31,7 +34,7 @@ pub fn one() {
         let came_from_position = came_from.get(&c).unwrap();
         c = *came_from_position;
         path.insert(*came_from_position);
-        if *came_from_position == (0,0) {
+        if *came_from_position == (0, 0) {
             break;
         }
     }
@@ -41,25 +44,28 @@ pub fn one() {
 #[aocd(2024, 18)]
 pub fn two() {
     let input = input!();
-    let bytes: Vec<_> = input.lines().map(|line| {
-        let split: Vec<_> = line.split(',').collect();
-        let x = split[0].parse::<i32>().unwrap();
-        let y = split[1].parse::<i32>().unwrap();
-        (x,y)
-    }).collect();
+    let bytes: Vec<_> = input
+        .lines()
+        .map(|line| {
+            let split: Vec<_> = line.split(',').collect();
+            let x = split[0].parse::<i32>().unwrap();
+            let y = split[1].parse::<i32>().unwrap();
+            (x, y)
+        })
+        .collect();
     let dimension = 70;
     let mut num_fallen_bytes = 1024;
     let mut grid = HashMap::new();
     for i in 0..=dimension {
         for j in 0..=dimension {
-            grid.insert((i,j), '.');
+            grid.insert((i, j), '.');
         }
     }
     bytes.iter().take(num_fallen_bytes).for_each(|byte| {
         grid.insert((byte.0, byte.1), '#');
     });
     let goal = (dimension, dimension);
-    let mut breaking_byte = (0,0);
+    let mut breaking_byte = (0, 0);
     loop {
         let (distance_to_goal, came_from) = a_star(&grid, goal);
         if distance_to_goal == 0 {
@@ -72,7 +78,7 @@ pub fn two() {
             let came_from_position = came_from.get(&c).unwrap();
             c = *came_from_position;
             path.insert(*came_from_position);
-            if *came_from_position == (0,0) {
+            if *came_from_position == (0, 0) {
                 break;
             }
         }
@@ -110,15 +116,18 @@ impl Ord for Node {
     }
 }
 
-fn a_star(grid: &HashMap<(i32, i32), char>, goal: (i32, i32)) -> (usize, HashMap<(i32, i32), (i32, i32)>) {
+fn a_star(
+    grid: &HashMap<(i32, i32), char>,
+    goal: (i32, i32),
+) -> (usize, HashMap<(i32, i32), (i32, i32)>) {
     let mut to_visit = BinaryHeap::new();
     to_visit.push(Reverse(Node {
-        position: (0,0),
+        position: (0, 0),
         distance: 0,
         h: goal.0 + goal.1,
     }));
     let mut visited = HashSet::new();
-    let mut distance_to_goal = 0; 
+    let mut distance_to_goal = 0;
     let mut came_from = HashMap::new();
     while let Some(Reverse(current)) = to_visit.pop() {
         if current.position == goal {

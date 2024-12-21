@@ -6,26 +6,31 @@ use itertools::Itertools;
 #[aocd(2024, 15)]
 pub fn one() {
     let input = input!();
-    let direction_map = HashMap::from([(Direction::Up, (-1, 0)), (Direction::Down, (1, 0)), (Direction::Left, (0, -1)), (Direction::Right, (0, 1))]);
+    let direction_map = HashMap::from([
+        (Direction::Up, (-1, 0)),
+        (Direction::Down, (1, 0)),
+        (Direction::Left, (0, -1)),
+        (Direction::Right, (0, 1)),
+    ]);
     let grid_string = input.split("\n\n").collect::<Vec<_>>()[0];
     let instruction_string = input.split("\n\n").collect::<Vec<_>>()[1];
     let mut grid = HashMap::new();
     let instructions = build_instructions(instruction_string);
-    let mut robot_position = (0,0);
-    let mut bounds = (0,0);
+    let mut robot_position = (0, 0);
+    let mut bounds = (0, 0);
     grid_string.lines().enumerate().for_each(|(i, line)| {
         line.chars().enumerate().for_each(|(j, c)| {
             let i = i as i32;
             let j = j as i32;
-            grid.insert((i,j), c);
+            grid.insert((i, j), c);
             if c == '@' {
-                robot_position = (i,j);
+                robot_position = (i, j);
             }
-            bounds.0 = i+1;
+            bounds.0 = i + 1;
             bounds.1 = j + 1;
         });
     });
-    
+
     for instruction in instructions {
         let v = direction_map.get(&instruction).unwrap();
         let moves = make_move(&mut grid, robot_position, v, '@');
@@ -37,45 +42,53 @@ pub fn one() {
             }
         }
     }
-    let gps_sum: u32 = grid.keys().map(|k| {
-        let c = grid.get(k).unwrap();
-        if *c == 'O' {
-            return (k.0 as u32)*100 + (k.1 as u32);
-        }
-        0
-    }).sum();
+    let gps_sum: u32 = grid
+        .keys()
+        .map(|k| {
+            let c = grid.get(k).unwrap();
+            if *c == 'O' {
+                return (k.0 as u32) * 100 + (k.1 as u32);
+            }
+            0
+        })
+        .sum();
     submit!(1, gps_sum);
 }
 
 #[aocd(2024, 15)]
 pub fn two() {
     let input = input!();
-    let direction_map = HashMap::from([(Direction::Up, (-1, 0)), (Direction::Down, (1, 0)), (Direction::Left, (0, -1)), (Direction::Right, (0, 1))]);
+    let direction_map = HashMap::from([
+        (Direction::Up, (-1, 0)),
+        (Direction::Down, (1, 0)),
+        (Direction::Left, (0, -1)),
+        (Direction::Right, (0, 1)),
+    ]);
     let grid_string = input.split("\n\n").collect::<Vec<_>>()[0];
     let instruction_string = input.split("\n\n").collect::<Vec<_>>()[1];
     let mut grid = HashMap::new();
     let instructions = build_instructions(instruction_string);
-    let mut robot_position = (0,0);
-    let mut bounds = (0,0);
+    let mut robot_position = (0, 0);
+    let mut bounds = (0, 0);
     grid_string.lines().enumerate().for_each(|(i, line)| {
         line.chars().enumerate().for_each(|(j, c)| {
             let i = i as i32;
-            let j = (j as i32)*2;
+            let j = (j as i32) * 2;
             if c == '#' {
-                grid.insert((i,j), c);
-                grid.insert((i,j+1), c);
+                grid.insert((i, j), c);
+                grid.insert((i, j + 1), c);
             } else if c == '@' {
-                grid.insert((i,j), c);
-                robot_position = (i,j);
-                grid.insert((i,j+1), '.');
+                grid.insert((i, j), c);
+                robot_position = (i, j);
+                grid.insert((i, j + 1), '.');
             } else if c == '.' {
-                grid.insert((i,j), c);
-                grid.insert((i,j+1), c);
+                grid.insert((i, j), c);
+                grid.insert((i, j + 1), c);
             } else if c == 'O' {
-                grid.insert((i,j), '[');
-                grid.insert((i,j+1), ']');
+                grid.insert((i, j), '[');
+                grid.insert((i, j + 1), ']');
             }
-            bounds.0 = i+1;
+            bounds.0 = i + 1;
             bounds.1 = j + 2;
         });
     });
@@ -83,13 +96,9 @@ pub fn two() {
         let v = direction_map.get(instruction).unwrap();
         let mut moves = make_move(&mut grid, robot_position, v, '@');
         if *instruction == Direction::Up {
-            moves.sort_by(|a, b| {
-                a.start.0.cmp(&b.start.0)
-            });
+            moves.sort_by(|a, b| a.start.0.cmp(&b.start.0));
         } else if *instruction == Direction::Down {
-            moves.sort_by(|a, b| {
-                b.start.0.cmp(&a.start.0)
-            });
+            moves.sort_by(|a, b| b.start.0.cmp(&a.start.0));
         }
         for move_instruction in moves {
             *grid.get_mut(&move_instruction.start).unwrap() = '.';
@@ -99,17 +108,25 @@ pub fn two() {
             }
         }
     }
-    let gps_sum: u64 = grid.keys().map(|k| {
-        let c = grid.get(k).unwrap();
-        if *c == '[' {
-            return (k.0 as u64)*100 + (k.1 as u64);
-        }
-        0
-    }).sum();
+    let gps_sum: u64 = grid
+        .keys()
+        .map(|k| {
+            let c = grid.get(k).unwrap();
+            if *c == '[' {
+                return (k.0 as u64) * 100 + (k.1 as u64);
+            }
+            0
+        })
+        .sum();
     submit!(2, gps_sum);
 }
 
-fn make_move(grid: &mut HashMap<(i32,i32), char>, current: (i32, i32), velocity: &(i32, i32), item: char) -> Vec<Move> {
+fn make_move(
+    grid: &mut HashMap<(i32, i32), char>,
+    current: (i32, i32),
+    velocity: &(i32, i32),
+    item: char,
+) -> Vec<Move> {
     let new_position = (current.0 + velocity.0, current.1 + velocity.1);
     let new_position_space = *grid.get(&new_position).unwrap();
     let mut moves = vec![];
@@ -153,7 +170,7 @@ fn make_move(grid: &mut HashMap<(i32,i32), char>, current: (i32, i32), velocity:
                 end: new_position,
             });
         }
-    }  else if new_position_space == ']' {
+    } else if new_position_space == ']' {
         // push boxes!!
         let box_left_side_position = (new_position.0, new_position.1 - 1);
         let left_moves = make_move(grid, box_left_side_position, velocity, '[');
@@ -181,10 +198,10 @@ struct Move {
 }
 
 #[allow(dead_code)]
-fn print_grid(grid: &HashMap<(i32,i32), char>, bounds: (i32, i32)) {
+fn print_grid(grid: &HashMap<(i32, i32), char>, bounds: (i32, i32)) {
     for i in 0..bounds.0 {
         for j in 0..bounds.1 {
-            let c = grid.get(&(i,j)).unwrap();
+            let c = grid.get(&(i, j)).unwrap();
             print!("{c}");
         }
         println!();
@@ -208,7 +225,6 @@ fn build_instructions(instruction_string: &str) -> Vec<Direction> {
     });
     instructions
 }
-
 
 #[derive(Hash, PartialEq, Eq, Debug, Clone, Copy)]
 enum Direction {
