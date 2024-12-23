@@ -55,7 +55,6 @@ pub fn one() {
                 let time = start.distance_from_start
                     + (path_length - end.distance_from_start)
                     + distance as usize;
-                let x = path_length - time;
                 if time <= target {
                     fast_cheats += 1;
                 }

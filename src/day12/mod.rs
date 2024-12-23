@@ -200,50 +200,34 @@ fn build_edge_nodes(
     if *direction == Direction::Up {
         let x = (current.0, current.1);
         let y = (current.0, current.1 + 1);
-        let a = graph.entry(x).or_insert(Node {
-            next: Vec::new(),
-        });
+        let a = graph.entry(x).or_insert(Node { next: Vec::new() });
         // println!("a: {a:?}");
         a.next.push((Orientation::Horizontal, y));
         // println!("a: {a:?}");
-        let b = graph.entry(y).or_insert(Node {
-            next: Vec::new(),
-        });
+        let b = graph.entry(y).or_insert(Node { next: Vec::new() });
         // println!("b: {b:?}");
         b.next.push((Orientation::Horizontal, x));
         // println!("b: {b:?}");
     } else if *direction == Direction::Right {
         let x = (current.0, current.1 + 1);
         let y = (current.0 + 1, current.1 + 1);
-        let a = graph.entry(x).or_insert(Node {
-            next: Vec::new(),
-        });
+        let a = graph.entry(x).or_insert(Node { next: Vec::new() });
         a.next.push((Orientation::Vertical, y));
-        let b = graph.entry(y).or_insert(Node {
-            next: Vec::new(),
-        });
+        let b = graph.entry(y).or_insert(Node { next: Vec::new() });
         b.next.push((Orientation::Vertical, x));
     } else if *direction == Direction::Down {
         let x = (current.0 + 1, current.1 + 1);
         let y = (current.0 + 1, current.1);
-        let a = graph.entry(x).or_insert(Node {
-            next: Vec::new(),
-        });
+        let a = graph.entry(x).or_insert(Node { next: Vec::new() });
         a.next.push((Orientation::Horizontal, y));
-        let b = graph.entry(y).or_insert(Node {
-            next: Vec::new(),
-        });
+        let b = graph.entry(y).or_insert(Node { next: Vec::new() });
         b.next.push((Orientation::Horizontal, x));
     } else if *direction == Direction::Left {
         let x = (current.0 + 1, current.1);
         let y = (current.0, current.1);
-        let a = graph.entry(x).or_insert(Node {
-            next: Vec::new(),
-        });
+        let a = graph.entry(x).or_insert(Node { next: Vec::new() });
         a.next.push((Orientation::Vertical, y));
-        let b = graph.entry(y).or_insert(Node {
-            next: Vec::new(),
-        });
+        let b = graph.entry(y).or_insert(Node { next: Vec::new() });
         b.next.push((Orientation::Vertical, x));
     }
 }

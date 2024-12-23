@@ -1,7 +1,6 @@
 use std::collections::HashSet;
 
 use aocd::*;
-use rayon::iter::ParallelIterator;
 use regex::Regex;
 
 #[aocd(2024, 17)]
