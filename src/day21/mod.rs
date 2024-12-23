@@ -38,7 +38,7 @@ pub fn one() {
         .lines()
         .map(|line| {
             let numeric_code = line[0..3].parse::<usize>().unwrap();
-            let mut current_robot_moves =
+            let current_robot_moves =
                 builds_dirpad_commands_for_input(line, &numpad_map, &direction_map, 'A', &(0, 0));
             let min_input_length = current_robot_moves
                 .iter()

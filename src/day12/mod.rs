@@ -118,7 +118,6 @@ pub fn two() {
 }
 
 struct Node {
-    position: (isize, isize),
     next: Vec<(Orientation, (isize, isize))>,
 }
 
@@ -202,14 +201,12 @@ fn build_edge_nodes(
         let x = (current.0, current.1);
         let y = (current.0, current.1 + 1);
         let a = graph.entry(x).or_insert(Node {
-            position: x,
             next: Vec::new(),
         });
         // println!("a: {a:?}");
         a.next.push((Orientation::Horizontal, y));
         // println!("a: {a:?}");
         let b = graph.entry(y).or_insert(Node {
-            position: y,
             next: Vec::new(),
         });
         // println!("b: {b:?}");
@@ -219,12 +216,10 @@ fn build_edge_nodes(
         let x = (current.0, current.1 + 1);
         let y = (current.0 + 1, current.1 + 1);
         let a = graph.entry(x).or_insert(Node {
-            position: x,
             next: Vec::new(),
         });
         a.next.push((Orientation::Vertical, y));
         let b = graph.entry(y).or_insert(Node {
-            position: y,
             next: Vec::new(),
         });
         b.next.push((Orientation::Vertical, x));
@@ -232,12 +227,10 @@ fn build_edge_nodes(
         let x = (current.0 + 1, current.1 + 1);
         let y = (current.0 + 1, current.1);
         let a = graph.entry(x).or_insert(Node {
-            position: x,
             next: Vec::new(),
         });
         a.next.push((Orientation::Horizontal, y));
         let b = graph.entry(y).or_insert(Node {
-            position: y,
             next: Vec::new(),
         });
         b.next.push((Orientation::Horizontal, x));
@@ -245,12 +238,10 @@ fn build_edge_nodes(
         let x = (current.0 + 1, current.1);
         let y = (current.0, current.1);
         let a = graph.entry(x).or_insert(Node {
-            position: x,
             next: Vec::new(),
         });
         a.next.push((Orientation::Vertical, y));
         let b = graph.entry(y).or_insert(Node {
-            position: y,
             next: Vec::new(),
         });
         b.next.push((Orientation::Vertical, x));
