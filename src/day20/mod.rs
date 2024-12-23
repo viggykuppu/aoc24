@@ -7,7 +7,7 @@ use std::{
 use aocd::*;
 use nalgebra::base;
 
-#[aocd(2024, 20, "src/day20/input.txt")]
+#[aocd(2024, 20)]
 pub fn one() {
     let input = input!();
     let mut start = (0, 0);
@@ -67,7 +67,7 @@ pub fn one() {
     submit!(1, fast_cheats);
 }
 
-#[aocd(2024, 20, "src/day20/input.txt")]
+#[aocd(2024, 20)]
 pub fn two() {
     let input = input!();
     let mut start = (0, 0);

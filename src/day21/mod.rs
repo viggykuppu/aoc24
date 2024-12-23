@@ -3,7 +3,7 @@ use std::{collections::HashMap, usize};
 use aocd::*;
 use itertools::Itertools;
 
-#[aocd(2024, 21, "src/day21/input.txt")]
+#[aocd(2024, 21)]
 pub fn one() {
     let input = input!();
     let numpad_map = HashMap::from([

@@ -10,7 +10,7 @@ struct Robot {
     velocity: (i32, i32),
 }
 
-#[aocd(2024, 14, "src/day14/input.txt")]
+#[aocd(2024, 14)]
 pub fn one() {
     let input = input!();
     let regex = Regex::new(r"p=(\d+),(\d+) v=([\+\-]{0,1}\d+),([\+\-]{0,1}\d+)").unwrap();
@@ -53,7 +53,7 @@ pub fn one() {
     submit!(1, safety_factor);
 }
 
-#[aocd(2024, 14, "src/day14/input.txt")]
+#[aocd(2024, 14)]
 pub fn two() {
     let input = input!();
     let regex = Regex::new(r"p=(\d+),(\d+) v=([\+\-]{0,1}\d+),([\+\-]{0,1}\d+)").unwrap();
