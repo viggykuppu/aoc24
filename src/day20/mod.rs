@@ -1,11 +1,9 @@
 use std::{
-    cmp::Reverse,
-    collections::{BinaryHeap, HashMap, HashSet},
+    collections::{HashMap, HashSet},
     usize,
 };
 
 use aocd::*;
-use nalgebra::base;
 
 #[aocd(2024, 20)]
 pub fn one() {

@@ -1,7 +1,4 @@
-use std::{
-    cmp::Reverse,
-    collections::{BinaryHeap, HashMap, HashSet},
-};
+use std::collections::{HashMap, HashSet};
 
 use aocd::*;
 
