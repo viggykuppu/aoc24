@@ -1,7 +1,6 @@
-use std::{collections::{HashMap, HashSet}, usize};
+use std::{collections::HashMap, usize};
 
 use aocd::*;
-use itertools::Itertools;
 
 #[aocd(2024, 22)]
 pub fn one() {

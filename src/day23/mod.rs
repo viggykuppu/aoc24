@@ -1,11 +1,13 @@
-use std::{collections::{HashMap, HashSet}, usize};
+use std::{
+    collections::{HashMap, HashSet},
+    usize,
+};
 
 use aocd::*;
 use itertools::Itertools;
 
 #[derive(Debug)]
 struct Node<'a> {
-    id: &'a str,
     next: HashSet<&'a str>,
 }
 
@@ -24,12 +26,10 @@ pub fn one() {
             possible_historian_computers.insert(b);
         }
         let left_node = graph.entry(a).or_insert(Node {
-            id: a,
             next: HashSet::new(),
         });
         left_node.next.insert(b);
         let right_node = graph.entry(b).or_insert(Node {
-            id: b,
             next: HashSet::new(),
         });
         right_node.next.insert(a);
@@ -41,11 +41,14 @@ pub fn one() {
     submit!(1, seen_3_cycles.len());
 }
 
-fn find_3_cycles(start: &str, graph: &HashMap<&str, Node>, seen_3_cycles: &mut HashSet<String>) -> usize {
+fn find_3_cycles(
+    start: &str,
+    graph: &HashMap<&str, Node>,
+    seen_3_cycles: &mut HashSet<String>,
+) -> usize {
     let start_adjacencies = &graph.get(start).unwrap().next;
     for adjacent_node in start_adjacencies {
         let next_adjacencies = &graph.get(adjacent_node).unwrap().next;
-        let i: Vec<_> = next_adjacencies.intersection(start_adjacencies).collect();
         for f in next_adjacencies.intersection(start_adjacencies) {
             let mut cycle_string = vec![start, adjacent_node, f];
             cycle_string.sort();
@@ -67,12 +70,10 @@ pub fn two() {
         computers.insert(a);
         computers.insert(b);
         let left_node = graph.entry(a).or_insert(Node {
-            id: a,
             next: HashSet::new(),
         });
         left_node.next.insert(b);
         let right_node = graph.entry(b).or_insert(Node {
-            id: b,
             next: HashSet::new(),
         });
         right_node.next.insert(a);
@@ -89,14 +90,18 @@ pub fn two() {
         }
     }
     let mut memo = HashMap::new();
-    let max_lan_size = three_cycles.iter().map(|c| get_lan_size(&graph, c, &mut memo)).max().unwrap();
+    let max_lan_size = three_cycles
+        .iter()
+        .map(|c| get_lan_size(&graph, c, &mut memo))
+        .max()
+        .unwrap();
     let mut answer = String::new();
     for (k, _) in memo.iter() {
-        if k.len() == max_lan_size*2 {
+        if k.len() == max_lan_size * 2 {
             let mut ids = Vec::new();
             while ids.len() < max_lan_size {
                 let i = ids.len();
-                ids.push(k[i*2..(i*2+2)].to_string());
+                ids.push(k[i * 2..(i * 2 + 2)].to_string());
             }
             answer = ids.join(",");
         }
@@ -104,7 +109,11 @@ pub fn two() {
     submit!(2, answer);
 }
 
-fn get_lan_size(graph: &HashMap<&str, Node>, cycle: &HashSet<&str>, memo: &mut HashMap<String, usize>) -> usize {
+fn get_lan_size(
+    graph: &HashMap<&str, Node>,
+    cycle: &HashSet<&str>,
+    memo: &mut HashMap<String, usize>,
+) -> usize {
     let mut lan_size = cycle.len();
     let x = ids_to_cycle(cycle);
     if let Some(v) = memo.get(&x) {
@@ -114,10 +123,9 @@ fn get_lan_size(graph: &HashMap<&str, Node>, cycle: &HashSet<&str>, memo: &mut H
         let potential_additions_to_cycle = &graph.get(node).unwrap().next;
         for n in potential_additions_to_cycle.iter() {
             if !cycle.contains(n) {
-                let n_is_part_of_cycle = cycle.iter().all(|x| {
-                    graph.get(x).unwrap().next.contains(n)
-                });
-                if  n_is_part_of_cycle {
+                let n_is_part_of_cycle =
+                    cycle.iter().all(|x| graph.get(x).unwrap().next.contains(n));
+                if n_is_part_of_cycle {
                     let mut new_cycle = cycle.clone();
                     new_cycle.insert(n);
                     let y = get_lan_size(graph, &new_cycle, memo);
