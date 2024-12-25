@@ -1,7 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use aocd::*;
-use regex::Regex;
 
 #[aocd(2024, 25)]
 pub fn one() {
@@ -25,7 +24,7 @@ pub fn one() {
             keys.push(values);
         }
     });
-    let mut num_lock_key_combos = 0; 
+    let mut num_lock_key_combos = 0;
     for lock in locks.iter() {
         for key in keys.iter() {
             for i in 0..5 {
@@ -38,7 +37,7 @@ pub fn one() {
             }
         }
     }
-    
+
     submit!(1, num_lock_key_combos);
 }
 

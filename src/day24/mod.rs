@@ -10,9 +10,9 @@ pub fn one() {
     let initial_value_regex = Regex::new(r"(.*): (\d)").unwrap();
     let value_regex = Regex::new(r"(.+) (AND|XOR|OR) (.+) -> (.+)").unwrap();
     let mut gates = Vec::new();
-    let mut z_bits = 0; 
+    let mut z_bits = 0;
     input.lines().for_each(|line| {
-        if let Some(caps) =  initial_value_regex.captures(line) {
+        if let Some(caps) = initial_value_regex.captures(line) {
             let label = caps.get(1).unwrap().as_str();
             let initial_value = caps.get(2).unwrap().as_str().parse::<u8>().unwrap();
             outputs.insert(label, initial_value);
@@ -70,9 +70,9 @@ pub fn two() {
     let value_regex = Regex::new(r"(.+) (AND|XOR|OR) (.+) -> (.+)").unwrap();
     let mut gates = Vec::new();
     let mut gates_map = HashMap::new();
-    let mut z_bits = 0; 
+    let mut z_bits = 0;
     input.lines().for_each(|line| {
-        if let Some(caps) =  initial_value_regex.captures(line) {
+        if let Some(caps) = initial_value_regex.captures(line) {
             let label = caps.get(1).unwrap().as_str();
             let initial_value = caps.get(2).unwrap().as_str().parse::<u8>().unwrap();
             outputs.insert(label, initial_value);
@@ -104,7 +104,7 @@ pub fn two() {
     // let out = get_base_wires("z17", &gates_map);
     // println!("{out:?}");
     for i in 0..46 {
-        let k = format!("z{}",convert_i_to_index_string(i));
+        let k = format!("z{}", convert_i_to_index_string(i));
         print_dependencies(&k, &gates_map, 2);
         println!();
     }
@@ -114,27 +114,31 @@ pub fn two() {
     let y = convert_output_to_decimal("y", &outputs);
     let a = x + y;
     let z = convert_output_to_decimal("z", &outputs);
-    println!("{:#045b}\n{:#045b}", a,z);
-    let mut x = vec!["dkr","z05","htp","hhh","ggk","z15","z20","rhv"];
+    println!("{:#045b}\n{:#045b}", a, z);
+    let mut x = vec!["dkr", "z05", "htp", "hhh", "ggk", "z15", "z20", "rhv"];
     x.sort();
     let z = x.join(",");
     submit!(2, z);
 }
 
 fn set_input(prefix: &str, binary_string: &str, outputs: &mut HashMap<&str, u8>) {
-    binary_string.chars().skip(3).enumerate().for_each(|(i, c)| {
-        let index = 45 - i;
-        let mut index_string = index.to_string();
-        if index_string.len() == 1 {
-            index_string = format!("0{index_string}");
-        }
-        let key_string = format!("{prefix}{index_string}");
-        let key = key_string.as_str();
-        println!("{key}");
-        if let Some(v) = outputs.get_mut(key) {
-            *v = c.to_string().parse::<u8>().unwrap();
-        }
-    })
+    binary_string
+        .chars()
+        .skip(3)
+        .enumerate()
+        .for_each(|(i, c)| {
+            let index = 45 - i;
+            let mut index_string = index.to_string();
+            if index_string.len() == 1 {
+                index_string = format!("0{index_string}");
+            }
+            let key_string = format!("{prefix}{index_string}");
+            let key = key_string.as_str();
+            println!("{key}");
+            if let Some(v) = outputs.get_mut(key) {
+                *v = c.to_string().parse::<u8>().unwrap();
+            }
+        })
 }
 
 fn convert_output_to_decimal(prefix: &str, outputs: &HashMap<&str, u8>) -> u64 {
@@ -145,7 +149,7 @@ fn convert_output_to_decimal(prefix: &str, outputs: &HashMap<&str, u8>) -> u64 {
         let key_string = format!("{prefix}{i_string}");
         let key = key_string.as_str();
         if let Some(output) = outputs.get(&key) {
-            decimal_value += 2_u64.pow(i)*(*output as u64);
+            decimal_value += 2_u64.pow(i) * (*output as u64);
         } else {
             break;
         }
@@ -174,25 +178,27 @@ fn print_dependencies(output: &str, gates_map: &HashMap<&str, Gate>, depth: usiz
         print_dependencies(gate.rhs, gates_map, depth - 1);
         print!("]");
     }
-
 }
 
 fn get_base_wires<'a>(output: &'a str, gates_map: &'a HashMap<&'a str, Gate>) -> Vec<&'a str> {
     let mut deps = Vec::new();
     if output.contains('x') || output.contains('y') {
         deps.push(output);
-    } else {    
+    } else {
         let gate = gates_map.get(output).unwrap();
-        deps = [get_base_wires(gate.lhs, gates_map), get_base_wires(gate.rhs, gates_map)].concat();
+        deps = [
+            get_base_wires(gate.lhs, gates_map),
+            get_base_wires(gate.rhs, gates_map),
+        ]
+        .concat();
     }
     deps
 }
 
-
 fn evaluate_gates<'a>(gates: &'a [Gate], outputs: &mut HashMap<&'a str, u8>) {
     let mut gates_to_evaluate: HashSet<_> = (0..gates.len()).into_iter().collect();
     loop {
-        let mut gates_to_remove = HashSet::new(); 
+        let mut gates_to_remove = HashSet::new();
         for gate_id in gates_to_evaluate.iter() {
             let gate = &gates[*gate_id];
             if outputs.get(gate.lhs).is_some() && outputs.get(gate.rhs).is_some() {
